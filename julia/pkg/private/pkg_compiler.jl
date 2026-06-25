@@ -279,9 +279,25 @@ function generate_manifest(
     # Activate the temporary environment
     Pkg.activate(temp_env)
 
-    # Add additional registries
-    for reg in registries
-        Pkg.Registry.add(url = reg)
+    # Add additional registries using the host's available authentication methods
+    # This may require user intervention in Coder environments to authenticate with the
+    # Coder-supplied token for the first time
+    if !isempty(registries)
+        println("Adding additional registries...")
+    end
+    try
+        for reg in registries
+            # If adding a registry takes more than 30 seconds, it's probably because git
+            # is requesting a PAT or token location via CLI. We'll error out if this
+            # takes too long so that we aren't stuck forever.
+            t = @async Pkg.Registry.add(url = reg)
+            ret = timedwait(() -> istaskdone(t), 30)
+            ret == :timed_out ? error("Registry.add() timed out.") : nothing
+        end
+    catch err
+        @error "Couldn't add user-supplied registries: $registries. \
+            Is the host's git auth set up correctly?"
+        rethrow(err)
     end
 
     # Ensure package registry is available and up-to-date
