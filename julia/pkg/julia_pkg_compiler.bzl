@@ -25,6 +25,9 @@ def _julia_pkg_compiler_impl(ctx):
         "RULES_JULIA_PKG_COMPILER_MANIFEST_TOML": manifest_toml.short_path,
         "RULES_JULIA_PKG_COMPILER_PROJECT_TOML": project_toml.short_path,
         "RULES_JULIA_PKG_COMPILER_REGISTRIES": registries,
+        # Use the host's installed git and reach out to .netrc for auth. This is non-hermetic,
+        # but I don't know of any better workarounds.
+        "JULIA_PKG_USE_CLI_GIT": "true",
     }
 
     manifest_bazel_json = ctx.file.manifest_bazel_json
