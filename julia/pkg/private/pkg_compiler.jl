@@ -16,7 +16,10 @@ function parse_args()
 
     # Required environment variables set by the Bazel rule
     required_vars =
-        ["RULES_JULIA_PKG_COMPILER_PROJECT_TOML", "RULES_JULIA_PKG_COMPILER_MANIFEST_TOML"]
+        [
+            "RULES_JULIA_PKG_COMPILER_PROJECT_TOML",
+            "RULES_JULIA_PKG_COMPILER_MANIFEST_TOML",
+        ]
 
     for var in required_vars
         if !haskey(ENV, var)
@@ -50,6 +53,14 @@ function parse_args()
     end
 
     args["add"] = packages_to_add
+
+    # Parse list of registries
+    registries_env_var = "RULES_JULIA_PKG_COMPILER_REGISTRIES"
+    if !haskey(ENV, registries_env_var)
+        error("Environment variable $registries_env_var is not set")
+    end
+    registries = string.(split(ENV[registries_env_var], ","))
+    args["registries"] = registries
 
     return args
 end
@@ -229,6 +240,7 @@ function generate_manifest(
     project_toml_path::String,
     manifest_toml_path::String,
     manifest_bazel_json_path::String,
+    registries,
     packages_to_add::Vector{String} = String[],
 )
     """Generate Manifest.toml and Manifest.bazel.json from Project.toml using Pkg.
@@ -266,6 +278,11 @@ function generate_manifest(
 
     # Activate the temporary environment
     Pkg.activate(temp_env)
+
+    # Add additional registries
+    for reg in registries
+        Pkg.Registry.add(url = reg)
+    end
 
     # Ensure package registry is available and up-to-date
     # This is necessary when adding packages to a new environment
@@ -324,9 +341,10 @@ function main()
     manifest_toml = args["manifest_toml"]
     manifest_bazel_json = args["manifest_bazel_json"]
     packages_to_add = args["add"]
+    registries = args["registries"]
 
     # Generate Manifest.toml and Manifest.bazel.json
-    generate_manifest(project_toml, manifest_toml, manifest_bazel_json, packages_to_add)
+    generate_manifest(project_toml, manifest_toml, manifest_bazel_json, registries, packages_to_add)
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__

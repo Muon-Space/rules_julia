@@ -5,6 +5,8 @@ load("//julia/pkg/private:julia_pkg_compile_info.bzl", "JuliaPkgCompileInfo")
 def _julia_pkg_compiler_impl(ctx):
     project_toml = ctx.file.project_toml
     manifest_toml = ctx.file.manifest_toml
+    # comma-separated string of all added registries
+    registries = ','.join(ctx.attr.registries)
 
     if not project_toml.is_source:
         fail("`project_toml` cannot be generated. Please update it to be a source file for {}".format(ctx.label))
@@ -22,6 +24,7 @@ def _julia_pkg_compiler_impl(ctx):
     env = {
         "RULES_JULIA_PKG_COMPILER_MANIFEST_TOML": manifest_toml.short_path,
         "RULES_JULIA_PKG_COMPILER_PROJECT_TOML": project_toml.short_path,
+        "RULES_JULIA_PKG_COMPILER_REGISTRIES": registries,
     }
 
     manifest_bazel_json = ctx.file.manifest_bazel_json
@@ -99,6 +102,10 @@ with SHA256 hashes for all packages and their dependency graph.
             doc = "The `Project.toml` file describing dependencies.",
             allow_single_file = ["Project.toml", ".toml"],
             mandatory = True,
+        ),
+        "registries": attr.string_list(
+            doc = "Additional Julia registry URLs to add (e.g., private LocalRegistry.jl repos).",
+            default = [],
         ),
         "_compiler": attr.label(
             executable = True,
