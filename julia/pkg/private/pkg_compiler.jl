@@ -117,6 +117,72 @@ function compute_integrity(url::String)
     end
 end
 
+"""
+Build a lookup of UUID => repo_url for packages from non-General registries.
+
+After Pkg.instantiate()/resolve(), this queries all reachable registries and
+extracts the git repo URLs for packages that are NOT in the General registry.
+These packages need to be downloaded from their git repos rather than from
+pkg.julialang.org.
+
+Returns:
+    Dict{String, String}: Maps package UUID strings to their git repo URLs.
+"""
+function build_private_registry_lookup()
+
+    lookup = Dict{String, String}()
+
+    for reg in Pkg.Registry.reachable_registries()
+        if reg.name == "General"
+            continue
+        end
+
+        println("Scanning private registry: $(reg.name)")
+
+        for (uuid, pkg_entry) in reg.pkgs
+            try
+                info = Pkg.Registry.registry_info(pkg_entry)
+                if info.repo !== nothing && !isempty(info.repo)
+                    lookup[string(uuid)] = info.repo
+                end
+            catch e
+                # Some packages may not have registry_info available
+                @warn "Could not get registry info for package $(pkg_entry.name): $e"
+            end
+        end
+    end
+
+    println("Found $(length(lookup)) packages from private registries")
+    return lookup
+
+end
+
+"""Convert a git repository URL to a GitHub/GHE archive download URL.
+Args:
+    repo_url: Git repository URL (e.g., "https://github.com/org/Pkg.jl.git")
+    tree_hash: Git tree hash for the specific version
+Returns:
+    String: Archive download URL (e.g., "https://github.com/org/Pkg.jl/archive/{hash}.tar.gz")
+Note: This assumes GitHub/GitLab/GHE URL patterns. Other git hosts may need different handling.
+"""
+function repo_url_to_archive_url(repo_url::String, tree_hash::String)
+
+    base_url = repo_url
+    if endswith(base_url, ".git")
+        base_url = base_url[1:end-4]
+    end
+    # Construct archive URL (GitHub/GHE pattern)
+    # Some (most) or these URLs will actually be formatted for SSH. We need them to be
+    # formatted for HTTP for archive downloading to work.
+    http_url = replace(
+        base_url,
+        "muonspace@muonspace.ghe.com:"=>"https://muonspace.ghe.com/"
+    )
+    archive_url = "$(http_url)/archive/$(tree_hash).tar.gz"
+    return archive_url
+
+end
+
 function escape_json_string(s::String)
     """Escape a string for JSON output."""
     result = IOBuffer()
@@ -190,41 +256,65 @@ function write_json_object(io::IO, obj::Dict{String,Any}, indent::String = "")
     write(io, indent, "}")
 end
 
-function generate_bazel_lockfile(packages::Dict{String,Any}, output_path::String)
-    """Generate Manifest.bazel.json with integrity values for all packages."""
+"""Generate Manifest.bazel.json with integrity values for all packages.
+
+Args:
+    packages: Dict of package name => package data from parse_manifest_toml()
+    output_path: Path to write the Manifest.bazel.json file
+    private_registry_lookup: Dict of UUID => repo_url for packages from private registries
+"""
+function generate_bazel_lockfile(
+    packages::Dict{String,Any},
+    output_path::String,
+    private_registry_lookup = Dict{String,String}()
+)
 
     lockfile = Dict{String,Any}()
 
     total = length(packages)
     current = 0
 
-    for (name, pkg_data) in packages
+    pkg_items = collect(packages)
+    lockfile_lock = ReentrantLock()
+
+    Threads.@threads for (name, pkg_data) in pkg_items
         current += 1
         uuid = pkg_data["uuid"]
         tree_hash = pkg_data["git-tree-sha1"]
         version = pkg_data["version"]
         deps = pkg_data["deps"]
 
-        # Construct the package server URL
-        url = "https://pkg.julialang.org/package/$uuid/$tree_hash"
+        # Determine the download URL based on whether this package is from a private registry
+        if haskey(private_registry_lookup, uuid)
+            # Package is from a private registry - use git archive URL
+            repo_url = private_registry_lookup[uuid]
+            url = repo_url_to_archive_url(repo_url, tree_hash)
+            source_type = "private"
+        else
+            # Package is from General registry - use public package server
+            url = "https://pkg.julialang.org/package/$uuid/$tree_hash"
+            source_type = "public"
+        end
 
-        print("[$current/$total] Computing integrity for $name@$version... ")
+        println("[$current/$total] Computing integrity for $name@$version ($source_type)... ")
         flush(stdout)
 
         try
             integrity_value = compute_integrity(url)
-            println("✓")
+            # println("✓")
 
-            lockfile[name] = Dict(
-                "urls" => [url],
-                "integrity" => integrity_value,
-                "deps" => sort(deps),  # Sort dependencies for deterministic output
-                "version" => version,
-                "uuid" => uuid,
-            )
+            lock(lockfile_lock) do
+                lockfile[name] = Dict(
+                    "urls" => [url],
+                    "integrity" => integrity_value,
+                    "deps" => sort(deps),  # Sort dependencies for deterministic output
+                    "version" => version,
+                    "uuid" => uuid,
+                )
+            end
         catch e
-            println("✗")
-            println(stderr, "  Error downloading $name: $e")
+            # println("✗")
+            println(stderr, "Error downloading $name from $url: $e")
             rethrow(e)
         end
     end
@@ -252,6 +342,7 @@ function generate_manifest(
         project_toml_path: Path to the Project.toml file
         manifest_toml_path: Path where Manifest.toml will be written
         manifest_bazel_json_path: Path where Manifest.bazel.json will be written
+        registries: list of URLs of registries to add to the environment
         packages_to_add: Optional list of package names to add before resolving dependencies
     """
     println("=" ^ 70)
@@ -326,6 +417,11 @@ function generate_manifest(
         error("Failed to generate Manifest.toml")
     end
 
+    # Build lookup of private registry packages (UUID => repo_url)
+    # This must be done while the temp environment is still active and registries are available
+    println()
+    println("Building private registry lookup...")
+    private_registry_lookup = build_private_registry_lookup()
 
     # Parse the manifest and generate Bazel lockfile
     packages = parse_manifest_toml(temp_manifest)
@@ -333,7 +429,7 @@ function generate_manifest(
     println()
     println("Generating Bazel lockfile with integrity values...")
     println()
-    generate_bazel_lockfile(packages, manifest_bazel_json_path)
+    generate_bazel_lockfile(packages, manifest_bazel_json_path, private_registry_lookup)
 
     # Copy the generated Manifest.toml to the output location
     cp(temp_project, project_toml_path, force = true)

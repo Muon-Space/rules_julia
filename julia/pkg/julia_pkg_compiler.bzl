@@ -28,6 +28,7 @@ def _julia_pkg_compiler_impl(ctx):
         # Use the host's installed git and reach out to .netrc for auth. This is non-hermetic,
         # but I don't know of any better workarounds.
         "JULIA_PKG_USE_CLI_GIT": "true",
+        "JULIA_NUM_THREADS": "auto",
     }
 
     manifest_bazel_json = ctx.file.manifest_bazel_json
