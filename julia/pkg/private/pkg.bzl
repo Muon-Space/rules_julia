@@ -1,5 +1,6 @@
 """Bazel tools for interfacing with Julia packages"""
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 _HUB_BUILD_FILE = """\
@@ -111,6 +112,15 @@ def _read_lockfile_json(module_ctx, lockfile_path):
 
     return packages
 
+def add_annotation_args(package_args, package_annotations):
+    if "patches" in package_annotations:
+        package_args["patches"] = package_annotations["patches"]
+    if "patch_args" in package_annotations:
+        package_args["patch_args"] = package_annotations["patch_args"]
+    if "patch_tool" in package_annotations:
+        package_args["patch_tool"] = package_annotations["patch_tool"]
+    return package_args
+
 def install(*, module_ctx, attrs, annotations = {}):
     """Instantiate the pkg module for the given `install` tag_class attributes.
 
@@ -132,14 +142,12 @@ def install(*, module_ctx, attrs, annotations = {}):
     # Create repositories for all packages
     for package_name, package_data in packages.items():
         # Extract package information
-        urls = package_data.get("urls", [])
+        pkg_type = package_data.get("type", "http")  # default to http for backwards compatibility
         version = package_data.get("version", "")
         uuid = package_data.get("uuid", "")
         all_deps = package_data.get("deps", [])
 
         # Validate required fields
-        if not urls:
-            fail("Package {} missing URLs in lockfile".format(package_name))
         if not uuid:
             fail("Package {} missing UUID in lockfile".format(package_name))
 
@@ -151,34 +159,70 @@ def install(*, module_ctx, attrs, annotations = {}):
         # Get annotations for this package if any
         package_annotations = annotations.get(package_name)
 
-        # Build http_archive arguments
-        http_archive_args = {
-            "build_file_content": _PKG_BUILD_FILE.format(
-                name = package_name,
-                dependencies = deps,
-                hub_name = attrs.name,
-                repo_name = repo_name,
-                version = version,
-                uuid = uuid,
-            ),
-            "integrity": package_data.get("integrity", ""),
-            "name": repo_name,
-            "sha256": package_data.get("sha256", ""),
-            "type": "tar.gz",
-            "urls": urls,
-        }
+        # Common build file content for both git and http packages
+        build_file_content = _PKG_BUILD_FILE.format(
+            name = package_name,
+            dependencies = deps,
+            hub_name = attrs.name,
+            repo_name = repo_name,
+            version = version,
+            uuid = uuid,
+        )
 
-        # Apply patch-related attributes if annotations exist for this package
-        if package_annotations:
-            if "patches" in package_annotations:
-                http_archive_args["patches"] = package_annotations["patches"]
-            if "patch_args" in package_annotations:
-                http_archive_args["patch_args"] = package_annotations["patch_args"]
-            if "patch_tool" in package_annotations:
-                http_archive_args["patch_tool"] = package_annotations["patch_tool"]
+        if pkg_type == "git":
+            # Private package: use git_repository
+            # This allows Bazel to use the host's git auth (SSH keys, credential helpers, etc.)
+            remote = package_data.get("remote", "")
+            tag = package_data.get("tag", "")
 
-        # Use julia_pkg repository rule with SHA256 verification from lockfile
-        http_archive(**http_archive_args)
+            if not remote:
+                fail("Package {} has type 'git' but missing 'remote' field".format(package_name))
+            if not tag:
+                fail("Package {} has type 'git' but missing 'tag' field".format(package_name))
+
+            git_repository_args = {
+                "name": repo_name,
+                "remote": remote,
+                "tag": tag,
+                "build_file_content": build_file_content,
+            }
+
+            # Apply patch-related attributes if annotations exist for this package
+            if package_annotations:
+                git_repository_args = add_annotation_args(
+                    git_repository_args,
+                    package_annotations
+                )
+
+            git_repository(**git_repository_args)
+
+        elif pkg_type == "http":
+            # Public package: use http_archive with integrity verification
+            urls = package_data.get("urls", [])
+
+            if not urls:
+                fail("Package {} has type 'http' but missing 'urls' field".format(package_name))
+
+            http_archive_args = {
+                "name": repo_name,
+                "urls": urls,
+                "integrity": package_data.get("integrity", ""),
+                "sha256": package_data.get("sha256", ""),
+                "type": "tar.gz",
+                "build_file_content": build_file_content,
+            }
+
+            # Apply patch-related attributes if annotations exist for this package
+            if package_annotations:
+                http_archive_args = add_annotation_args(
+                    http_archive_args,
+                    package_annotations
+                )
+
+            http_archive(**http_archive_args)
+
+        else:
+            fail("Package {} has unknown pkg_type: {}".format(package_name, pkg_type))
 
     # Create hub with all packages
     pkg_hub(

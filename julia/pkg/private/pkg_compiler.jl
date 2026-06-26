@@ -157,30 +157,26 @@ function build_private_registry_lookup()
 
 end
 
-"""Convert a git repository URL to a GitHub/GHE archive download URL.
+"""Normalize a git repository URL to HTTPS format.
 Args:
-    repo_url: Git repository URL (e.g., "https://github.com/org/Pkg.jl.git")
-    tree_hash: Git tree hash for the specific version
+    repo_url: Git repository URL (may be SSH or HTTPS format)
 Returns:
-    String: Archive download URL (e.g., "https://github.com/org/Pkg.jl/archive/{hash}.tar.gz")
-Note: This assumes GitHub/GitLab/GHE URL patterns. Other git hosts may need different handling.
+    String: HTTPS URL suitable for git_repository remote
 """
-function repo_url_to_archive_url(repo_url::String, tree_hash::String)
-
+function normalize_git_url(repo_url::String)
     base_url = repo_url
-    if endswith(base_url, ".git")
-        base_url = base_url[1:end-4]
+    # Ensure it ends with .git
+    if !endswith(base_url, ".git")
+        base_url = base_url * ".git"
     end
-    # Construct archive URL (GitHub/GHE pattern)
-    # Some (most) or these URLs will actually be formatted for SSH. We need them to be
-    # formatted for HTTP for archive downloading to work.
+    # Convert SSH format to HTTPS
+    # SSH: muonspace@muonspace.ghe.com:Muon-Space/Pkg.jl.git
+    # HTTPS: https://muonspace.ghe.com/Muon-Space/Pkg.jl.git
     http_url = replace(
         base_url,
-        "muonspace@muonspace.ghe.com:"=>"https://muonspace.ghe.com/"
+        "muonspace@muonspace.ghe.com:" => "https://muonspace.ghe.com/"
     )
-    archive_url = "$(http_url)/archive/$(tree_hash).tar.gz"
-    return archive_url
-
+    return http_url
 end
 
 function escape_json_string(s::String)
@@ -256,7 +252,17 @@ function write_json_object(io::IO, obj::Dict{String,Any}, indent::String = "")
     write(io, indent, "}")
 end
 
-"""Generate Manifest.bazel.json with integrity values for all packages.
+"""Generate Manifest.bazel.json with package metadata for Bazel.
+
+For public packages (General registry): uses http_archive with integrity hash from pkg.julialang.org
+For private packages: uses git_repository with version tag (auth handled by host's git)
+
+Determining SHA integrity for packages from General works fine, but it's trickier with
+private packages because of auth. I don't think we can assume everyone will have access to
+a PAT (or can we?) so for private Julia packages we use the git_repository strategy instead
+of http_archive. In any case, the tarballs we'll get from our private git repos aren't
+guaranteed to be stable anyway, so relying on them as a source of SHA-stable archives is
+unsafe.
 
 Args:
     packages: Dict of package name => package data from parse_manifest_toml()
@@ -284,38 +290,51 @@ function generate_bazel_lockfile(
         version = pkg_data["version"]
         deps = pkg_data["deps"]
 
-        # Determine the download URL based on whether this package is from a private registry
+        # Determine package source based on whether it's from a private registry
         if haskey(private_registry_lookup, uuid)
-            # Package is from a private registry - use git archive URL
+            # Package is from a private registry - use git_repository
+            # This allows Bazel to use the host's git auth (SSH keys, credential helpers, etc.)
             repo_url = private_registry_lookup[uuid]
-            url = repo_url_to_archive_url(repo_url, tree_hash)
-            source_type = "private"
-        else
-            # Package is from General registry - use public package server
-            url = "https://pkg.julialang.org/package/$uuid/$tree_hash"
-            source_type = "public"
-        end
+            remote = normalize_git_url(repo_url)
+            tag = "v" * version  # Julia convention: version tags are prefixed with 'v'
 
-        println("[$current/$total] Computing integrity for $name@$version ($source_type)... ")
-        flush(stdout)
-
-        try
-            integrity_value = compute_integrity(url)
-            # println("✓")
+            println("[$current/$total] Private package: $name@$version (git)")
+            flush(stdout)
 
             lock(lockfile_lock) do
                 lockfile[name] = Dict(
-                    "urls" => [url],
-                    "integrity" => integrity_value,
-                    "deps" => sort(deps),  # Sort dependencies for deterministic output
+                    "type" => "git",
+                    "remote" => remote,
+                    "tag" => tag,
+                    "deps" => sort(deps),
                     "version" => version,
                     "uuid" => uuid,
                 )
             end
-        catch e
-            # println("✗")
-            println(stderr, "Error downloading $name from $url: $e")
-            rethrow(e)
+        else
+            # Package is from General registry - use http_archive with integrity
+            url = "https://pkg.julialang.org/package/$uuid/$tree_hash"
+            println("[$current/$total] Computing integrity for $name@$version... ")
+            flush(stdout)
+
+            integrity_value = ""
+            try
+                integrity_value = compute_integrity(url)
+            catch e
+                println(stderr, "Error downloading $name from $url: $e")
+                rethrow(e)
+            end
+
+            lock(lockfile_lock) do
+                lockfile[name] = Dict(
+                    "type" => "http",
+                    "urls" => [url],
+                    "integrity" => integrity_value,
+                    "deps" => sort(deps),
+                    "version" => version,
+                    "uuid" => uuid,
+                )
+            end
         end
     end
 
