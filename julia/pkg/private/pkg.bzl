@@ -48,13 +48,18 @@ julia_library(
     ),
     data = glob(
         include = [
-            "*.toml",
+            "*",
             "src/**",
             "ext/**",
         ],
         exclude = [
+            "*.jl",
             "src/**/*.jl",
             "ext/**/*.jl",
+            "BUILD",
+            "BUILD.bazel",
+            "WORKSPACE",
+            "WORKSPACE.bazel",
         ],
         allow_empty = True,
     ),

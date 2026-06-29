@@ -71,6 +71,24 @@ def _collect_includes(deps):
         transitive = [dep[JuliaInfo].includes for dep in deps if JuliaInfo in dep],
     )
 
+def _collect_manifest_toml(deps):
+    """Collect manifest_toml and project_toml from first dependency that has them.
+
+    Args:
+        deps: List of dependency targets.
+
+    Returns:
+        tuple: (manifest_toml, project_toml) rlocation paths, or (None, None) if not found.
+    """
+    for dep in deps:
+        if JuliaInfo in dep:
+            info = dep[JuliaInfo]
+            manifest = getattr(info, "manifest_toml", None)
+            project = getattr(info, "project_toml", None)
+            if manifest:
+                return (manifest, project)
+    return (None, None)
+
 def _get_include(ctx, srcs = []):
     """Get the include path for the current target.
 
@@ -107,17 +125,21 @@ def _includes_map(include):
     """Map function for formatting include paths."""
     return "    \"{}\",".format(include)
 
-def _create_config_file(ctx, includes, runfiles):
+def _create_config_file(ctx, includes, runfiles, manifest_toml = None, project_toml = None):
     """Create a configuration file for Julia execution.
 
-    The config file contains two sections:
+    The config file contains:
     1. [includes] - Include paths for LOAD_PATH
     2. [runfiles] - All runfiles paths (excluding toolchain files) for manifest mode
+    3. manifest_toml - rlocation path to Manifest.toml (optional)
+    4. project_toml - rlocation path to Project.toml (optional)
 
     Args:
         ctx: Rule context.
         includes: depset of include paths.
         runfiles: ctx.runfiles object.
+        manifest_toml: Optional rlocation path to Manifest.toml.
+        project_toml: Optional rlocation path to Project.toml.
 
     Returns:
         File: The config file.
@@ -144,6 +166,12 @@ def _create_config_file(ctx, includes, runfiles):
     )
     args.add("]")
     args.add("")
+
+    # Add manifest_toml and project_toml paths if provided
+    if manifest_toml:
+        args.add("manifest_toml = \"{}\"".format(manifest_toml))
+    if project_toml:
+        args.add("project_toml = \"{}\"".format(project_toml))
 
     ctx.actions.write(
         output = config,
@@ -244,7 +272,10 @@ def _create_julia_binary_impl(
         if DefaultInfo in data_target:
             runfiles = runfiles.merge(data_target[DefaultInfo].default_runfiles)
 
-    config = _create_config_file(ctx, includes, runfiles)
+    # Collect manifest_toml and project_toml from dependencies
+    manifest_toml, project_toml = _collect_manifest_toml(deps)
+
+    config = _create_config_file(ctx, includes, runfiles, manifest_toml, project_toml)
 
     wrapper = _create_julia_wrapper(ctx, main_file, config, toolchain_info)
 

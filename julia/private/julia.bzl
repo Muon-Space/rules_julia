@@ -25,7 +25,17 @@ def _julia_library_impl(ctx):
         transitive = [julia_common.collect_includes(deps)],
     )
 
-    runfiles = ctx.runfiles(files = ctx.files.srcs + data)
+    # Handle manifest_toml and project_toml: pass rlocation paths to entrypoint
+    manifest_toml_rloc = None
+    project_toml_rloc = None
+    project_files = []
+    if ctx.file.manifest_toml:
+        manifest_toml_rloc = julia_common.rlocationpath(ctx.file.manifest_toml, ctx.workspace_name)
+        project_files.append(ctx.file.manifest_toml)
+    if ctx.file.project_toml:
+        project_toml_rloc = julia_common.rlocationpath(ctx.file.project_toml, ctx.workspace_name)
+        project_files.append(ctx.file.project_toml)
+    runfiles = ctx.runfiles(files = ctx.files.srcs + data + project_files)
     for dep in deps:
         if JuliaInfo in dep:
             runfiles = runfiles.merge(dep[JuliaInfo].runfiles)
@@ -40,6 +50,8 @@ def _julia_library_impl(ctx):
             transitive_srcs = transitive_srcs,
             include = include,
             includes = includes,
+            manifest_toml = manifest_toml_rloc,
+            project_toml = project_toml_rloc,
             runfiles = runfiles,
         ),
         DefaultInfo(
@@ -59,6 +71,14 @@ julia_library = rule(
         "deps": attr.label_list(
             doc = "Other Julia libraries this target depends on",
             providers = [JuliaInfo],
+        ),
+        "manifest_toml": attr.label(
+            doc = "Manifest.toml file for package resolution.",
+            allow_single_file = [".toml"],
+        ),
+        "project_toml": attr.label(
+            doc = "Project.toml file for package resolution.",
+            allow_single_file = [".toml"],
         ),
         "srcs": attr.label_list(
             doc = "Julia source files (.jl files)",

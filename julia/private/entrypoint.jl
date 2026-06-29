@@ -2,6 +2,8 @@
 
 module RulesJuliaInit
 import TOML
+import Pkg
+import UUIDs: UUID
 
 # Check if debug logging is enabled
 const DEBUG = haskey(ENV, "RULES_JULIA_DEBUG")
@@ -150,6 +152,8 @@ function compute_includes(config_path)
     # runfiles: Array of all runfiles paths for manifest mode
     includes = String[]
     runfiles_paths = String[]
+    manifest_toml = ""
+    project_toml = ""
 
     if isfile(config_path)
         config = try
@@ -160,6 +164,8 @@ function compute_includes(config_path)
         end
         includes = get(config, "includes", String[])
         runfiles_paths = get(config, "runfiles", String[])
+        manifest_toml = get(config, "manifest_toml", "")
+        project_toml = get(config, "project_toml", "")
     end
 
     # Determine RUNFILES_DIR
@@ -283,7 +289,156 @@ function compute_includes(config_path)
         end
     end
 
-    return runfiles_dir, include_paths, runfiles_paths
+    # Resolve manifest_toml and project_toml to absolute paths if provided
+    manifest_toml_path = !isempty(manifest_toml) ? normpath(joinpath(runfiles_dir, manifest_toml)) : ""
+    project_toml_path = !isempty(project_toml) ? normpath(joinpath(runfiles_dir, project_toml)) : ""
+
+    return runfiles_dir, include_paths, runfiles_paths, manifest_toml_path, project_toml_path
+end
+
+"""
+    setup_julia_environment(include_paths, runfiles_dir, manifest_toml_path, project_toml_path)
+
+Create a Julia environment by splicing runfiles paths into an existing Manifest.toml.
+
+This approach:
+1. Uses explicit paths for Project.toml and Manifest.toml (passed from Bazel config)
+2. Builds a name => runfiles_path mapping from all discovered packages
+3. Parses the existing Manifest.toml which Pkg already generated with correct structure
+4. Replaces `git-tree-sha1` entries with `path` entries for packages in runfiles
+5. Copies Project.toml and writes modified Manifest.toml to a temp directory
+6. Activates that environment
+
+This ensures packages like Preferences.jl, JLLWrappers, etc. work correctly because
+the Manifest retains all the structure Pkg expects (stdlibs, extensions, weakdeps).
+"""
+function setup_julia_environment(include_paths, runfiles_dir, manifest_toml_path::String, project_toml_path::String)
+    # If no manifest_toml provided, nothing to do
+    if isempty(manifest_toml_path) || !isfile(manifest_toml_path)
+        @debug "No Manifest.toml path provided or file doesn't exist, skipping environment setup"
+        return nothing
+    end
+
+    if isempty(project_toml_path) || !isfile(project_toml_path)
+        @debug "No Project.toml path provided or file doesn't exist, skipping environment setup"
+        return nothing
+    end
+
+    @debug "Setting up environment from manifest: $manifest_toml_path"
+    @debug "Project.toml: $project_toml_path"
+
+    # Build a name => runfiles_path mapping from all include paths
+    packages = Dict{String, String}()
+
+    for inc_path in include_paths
+        project_toml_candidates = [
+            joinpath(inc_path, "Project.toml"),           # inc_path = Repo.jl
+            joinpath(dirname(inc_path), "Project.toml"),  # inc_path = Repo.jl/src
+        ]
+
+        for project_path in project_toml_candidates
+            if !isfile(project_path)
+                continue
+            end
+            try
+                proj = TOML.parsefile(project_path)
+                name = get(proj, "name", nothing)
+                if name !== nothing
+                    pkg_root = dirname(project_path)
+                    packages[name] = pkg_root
+                    @debug "Found package in runfiles: $name at $pkg_root"
+                end
+            catch e
+                @debug "Failed to parse Project.toml at $project_path: $e"
+            end
+            break  # Found a valid Project.toml, don't check other candidates
+        end
+    end
+
+    if isempty(packages)
+        @debug "No packages found with Project.toml, skipping environment setup"
+        return nothing
+    end
+
+    # Parse the existing Manifest.toml
+    manifest = TOML.parsefile(manifest_toml_path)
+    deps = get(manifest, "deps", nothing)
+    if deps === nothing
+        @debug "Manifest.toml has no deps section"
+        return nothing
+    end
+
+    # Splice paths into manifest entries
+    # For each package entry, if we have a runfiles path for it, replace git-tree-sha1 with path
+    for (pkg_name, entries) in deps
+        # entries is a Vector of Dicts (manifest format 2.0)
+        if !(entries isa Vector)
+            continue
+        end
+        for entry in entries
+            if !(entry isa Dict)
+                continue
+            end
+
+            # Check if this package is in our runfiles
+            if haskey(packages, pkg_name)
+                runfiles_path = packages[pkg_name]
+
+                # Remove git-tree-sha1 if present (we're using path instead)
+                if haskey(entry, "git-tree-sha1")
+                    delete!(entry, "git-tree-sha1")
+                end
+
+                # Add or update path entry
+                if haskey(entry, "path")
+                    if entry["path"] == "." || entry["path"] == ".." || entry["path"] == "..." !isabspath(entry["path"])
+                        entry["path"] = runfiles_path
+                    end
+                else
+                    entry["path"] = runfiles_path
+                end
+
+                @debug "Updated manifest entry for $pkg_name => $runfiles_path"
+            end
+            # Note: stdlibs and packages not in runfiles keep their original entries
+        end
+    end
+
+    @debug "Processed $(length(packages)) package entries"
+
+    # Create temp environment with modified Manifest
+    temp_base = get(ENV, "TEST_TMPDIR", tempdir())
+    env_dir = mktempdir(temp_base; prefix = "julia_env_")
+
+    # In this temp dir, we only have Project.toml and Manifest.toml; we don't have any
+    # source files, and Pkg will attempt to check src/[Package].jl for the root package's primary
+    # file. To prevent that, we create a synthetic Project.toml that lists the root package
+    # as a dependency
+    proj_data = TOML.parsefile(project_toml_path)
+    deps = Dict{String,Any}(get(proj_data, "deps", Dict{String,Any}()))
+    root_name = get(proj_data, "name", nothing)
+    root_uuid = get(proj_data, "uuid", nothing)
+    if root_name !== nothing && root_uuid !== nothing
+        deps[root_name] = root_uuid
+    end
+    synthetic = Dict{String,Any}("deps" => deps)
+    open(joinpath(env_dir, "Project.toml"), "w") do f
+        TOML.print(f, synthetic)
+    end
+
+    # Write modified Manifest.toml
+    open(joinpath(env_dir, "Manifest.toml"), "w") do f
+        TOML.print(f, manifest)
+    end
+
+    @debug "Created environment at $env_dir"
+
+    # Activate this environment
+    pushfirst!(LOAD_PATH, env_dir)
+
+    @debug "Activated spliced environment, LOAD_PATH now has $(length(LOAD_PATH)) entries"
+
+    return env_dir
 end
 
 function initialize()
@@ -293,10 +448,17 @@ function initialize()
 
     # Compute includes
     @debug "Computing includes."
-    runfiles_dir, include_paths, runfiles_paths = compute_includes(config_path)
+    runfiles_dir, include_paths, runfiles_paths, manifest_toml_path, project_toml_path = compute_includes(config_path)
 
     @debug "Runfiles dir: $(runfiles_dir)"
     @debug "JULIA_DEPOT_PATH: $(get(ENV, "JULIA_DEPOT_PATH", "<not set>"))"
+    @debug "Manifest.toml: $(manifest_toml_path)"
+    @debug "Project.toml: $(project_toml_path)"
+
+    # Set up the synthetic Julia environment for proper Pkg metadata
+    # This enables packages like Preferences.jl, JLLWrappers, etc. to work
+    @debug "Setting up synthetic Julia environment."
+    setup_julia_environment(include_paths, runfiles_dir, manifest_toml_path, project_toml_path)
 
     # Set up ARGS for the main script
     empty!(ARGS)
