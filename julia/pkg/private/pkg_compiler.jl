@@ -6,9 +6,12 @@ and generate/update the Manifest.toml lockfile and Manifest.bazel.json with inte
 """
 
 using Pkg
+using Pkg.Artifacts
+using Pkg.BinaryPlatforms: HostPlatform
 using SHA
 using Base64
 using Downloads
+using TOML
 
 function parse_args()
     """Parse command-line arguments from environment variables and command line flags."""
@@ -179,6 +182,189 @@ function normalize_git_url(repo_url::String)
     return http_url
 end
 
+"""
+Map Julia platform triplet components to a canonical key for Bazel.
+
+Takes the platform components from Artifacts.toml and produces a key like
+"x86_64-linux-gnu" or "aarch64-apple-darwin".
+"""
+function platform_to_key(entry)
+    os = get(entry, "os", "")
+    arch = get(entry, "arch", "")
+    libc = get(entry, "libc", "")
+
+    # Build platform key similar to Julia's platform triplets
+    if os == "linux"
+        libc_suffix = libc == "musl" ? "musl" : "gnu"
+        return "$(arch)-linux-$(libc_suffix)"
+    elseif os == "macos"
+        return "$(arch)-apple-darwin"
+    elseif os == "windows"
+        return "$(arch)-w64-mingw32"
+    elseif os == "freebsd"
+        return "$(arch)-unknown-freebsd"
+    else
+        # Fallback: just concatenate available info
+        return "$(arch)-$(os)-$(libc)"
+    end
+end
+
+"""
+Extract artifact information from a JLL package's Artifacts.toml.
+
+Uses Julia's `select_downloadable_artifacts` to filter to artifacts that
+match the host platform, then extracts download URLs and SHA256 hashes.
+
+Args:
+    pkg_source_path: Path to the installed package source directory
+    pkg_name: Name of the package (for debugging)
+
+Returns:
+    Dict{String, Any}: Mapping of artifact names to their download info for the host platform
+"""
+function extract_jll_artifacts(pkg_source_path, pkg_name)
+
+    artifacts_toml_path = joinpath(pkg_source_path, "Artifacts.toml")
+
+    if !isfile(artifacts_toml_path)
+        return nothing
+    end
+
+    println("Found Artifacts.toml in $pkg_name")
+
+    # Get the host platform triplet for logging
+    host_triplet = Base.BinaryPlatforms.host_triplet()
+    println("Host platform: $host_triplet")
+
+    # Use Julia's built-in artifact selection to get artifacts for the host platform
+    # select_downloadable_artifacts returns a Dict{String, Any} where keys are artifact names
+    # and values contain the download info for the matching platform
+    host_platform = HostPlatform()
+    selected_artifacts = Pkg.Artifacts.select_downloadable_artifacts(
+        artifacts_toml_path;
+        platform = host_platform,
+        include_lazy = false  # Skip lazy artifacts as they may not be needed at build time
+    )
+
+    if isempty(selected_artifacts)
+        println("No artifacts match host platform $host_triplet")
+        return nothing
+    end
+
+    result = Dict{String, Any}()
+
+    for (artifact_name, artifact_info) in selected_artifacts
+
+        # artifact_info is a Dict with keys like "git-tree-sha1", "download", etc.
+        git_tree_sha1 = get(artifact_info, "git-tree-sha1", nothing)
+        if git_tree_sha1 === nothing
+            continue
+        end
+
+        # Use simplified platform key (first 3 parts of triplet) for Bazel constraints
+        # e.g., "x86_64-linux-gnu-libgfortran5-cxx11-..." -> "x86_64-linux-gnu"
+        # By this point, we've already collected the download URL, so we don't need to
+        # keep this info around
+        platform_key = join(split(host_triplet, "-")[1:3], "-")
+
+        artifact_entry = Dict{String, Any}(
+            "git_tree_sha1" => git_tree_sha1,
+            "platform_key" => platform_key,
+        )
+
+        download_entries = get(artifact_info, "download", [])
+        if !isempty(download_entries)
+            downloads = []
+            for dl in download_entries
+                if !(dl isa Dict)
+                    continue
+                end
+                dl_info = Dict{String, String}()
+                if haskey(dl, "url")
+                    dl_info["url"] = dl["url"]
+                end
+                if haskey(dl, "sha256")
+                    dl_info["sha256"] = dl["sha256"]
+                end
+                if !isempty(dl_info)
+                    push!(downloads, dl_info)
+                end
+            end
+            if !isempty(downloads)
+                artifact_entry["download"] = downloads
+            end
+        end
+
+        result[artifact_name] = artifact_entry
+
+    end
+
+    if isempty(result)
+        return nothing
+    end
+
+    println("Extracted $(length(result)) artifact(s) for platform $host_triplet")
+    return result
+
+end
+
+"""
+Find the source directory of an installed package.
+
+After Pkg.instantiate(), packages are installed in the depot. This function
+finds the actual source directory for a given package.
+
+Args:
+    pkg_uuid: UUID of the package
+    pkg_name: Name of the package
+    tree_hash: Git tree hash of the package version
+
+Returns:
+    String or Nothing: Path to package source directory, or nothing if not found
+"""
+function find_package_source(pkg_name::String, uuid, tree_hash::String)
+    # Packages are installed in depot at packages/<name>/<tree_hash>/
+    for depot in DEPOT_PATH
+        ver_slug = version_slug(uuid, tree_hash)
+        pkg_path = joinpath(depot, "packages", pkg_name, ver_slug)
+        println(pkg_path)
+        if isdir(pkg_path)
+            return pkg_path
+        end
+    end
+    return nothing
+end
+
+const slug_chars = String(['A':'Z'; 'a':'z'; '0':'9'])
+
+function slug(x::UInt32, p::Int)
+    y::UInt32 = x
+    sprint(sizehint=p) do io
+        n = length(slug_chars)
+        for i = 1:p
+            y, d = divrem(y, n)
+            write(io, slug_chars[1+d])
+        end
+    end
+end
+
+"""
+    version_slug(uuid, git_tree_sha1)::String
+
+Get the 5 character slug used to differentiate package versions in the Julia depot.
+
+Package code is stored at the path "DEPOT_PATH/package/slug". This code is taken from
+Julia's loading.jl in Base.
+"""
+function version_slug(uuid, git_tree_sha1, p=5)
+    sha1_hash = hex2bytes(git_tree_sha1)
+    return version_slug(Base.UUID(uuid), sha1_hash, p)
+end
+function version_slug(uuid::Base.UUID, sha1::Vector{UInt8}, p=5)
+    crc = Base._crc32c(sha1, Base._crc32c(uuid))
+    return slug(crc, p)
+end
+
 function escape_json_string(s::String)
     """Escape a string for JSON output."""
     result = IOBuffer()
@@ -206,8 +392,16 @@ function escape_json_string(s::String)
     return String(take!(result))
 end
 
-function write_json_array(io::IO, arr::Vector{String}, indent::String)
-    """Write a JSON array of strings."""
+write_json_value(io::IO, value, args...) = error("Unsupported JSON type: $(typeof(value))")
+write_json_value(io::IO, value::AbstractString, args...) = write(io, "\"", escape_json_string(value), "\"")
+write_json_value(io::IO, value::Bool, args...) = write(io, value ? "true" : "false")
+write_json_value(io::IO, value::Number, args...) = write(io, string(value))
+write_json_value(io::IO, value::AbstractVector, indent::AbstractString) = write_json_array(io, value, indent)
+write_json_value(io::IO, value::AbstractDict, indent::AbstractString) = write_json_object(io, value, indent)
+write_json_value(io::IO, ::Nothing, args...) = write(io, "null")
+
+function write_json_array(io::IO, arr::AbstractVector, indent::AbstractString)
+    """Write a JSON array."""
     if isempty(arr)
         write(io, "[]")
         return
@@ -215,7 +409,8 @@ function write_json_array(io::IO, arr::Vector{String}, indent::String)
 
     write(io, "[\n")
     for (i, item) in enumerate(arr)
-        write(io, indent, "  \"", escape_json_string(item), "\"")
+        write(io, indent, "  ")
+        write_json_value(io, item, indent * "  ")
         if i < length(arr)
             write(io, ",")
         end
@@ -224,25 +419,16 @@ function write_json_array(io::IO, arr::Vector{String}, indent::String)
     write(io, indent, "]")
 end
 
-function write_json_object(io::IO, obj::Dict{String,Any}, indent::String = "")
-    """Write a JSON object manually."""
+function write_json_object(io::IO, obj::AbstractDict, indent::AbstractString = "")
+    """Write a JSON object."""
     write(io, "{\n")
 
     keys_list = sort(collect(keys(obj)))  # Sort for deterministic output
     for (i, key) in enumerate(keys_list)
         value = obj[key]
-        write(io, indent, "  \"", escape_json_string(key), "\": ")
-
-        if value isa String
-            write(io, "\"", escape_json_string(value), "\"")
-        elseif value isa Vector{String}
-            write_json_array(io, value, indent * "  ")
-        elseif value isa Dict
-            write_json_object(io, value, indent * "  ")
-        else
-            error("Unsupported type: $(typeof(value))")
-        end
-
+        key_str = string(key)
+        write(io, indent, "  \"", escape_json_string(key_str), "\": ")
+        write_json_value(io, value, indent * "  ")
         if i < length(keys_list)
             write(io, ",")
         end
@@ -256,6 +442,7 @@ end
 
 For public packages (General registry): uses http_archive with integrity hash from pkg.julialang.org
 For private packages: uses git_repository with version tag (auth handled by host's git)
+For JLL packages: also extracts artifact download information for binary dependencies
 
 Determining SHA integrity for packages from General works fine, but it's trickier with
 private packages because of auth. I don't think we can assume everyone will have access to
@@ -302,7 +489,7 @@ function generate_bazel_lockfile(
             flush(stdout)
 
             lock(lockfile_lock) do
-                lockfile[name] = Dict(
+                lockfile[name] = Dict{String, Any}(
                     "type" => "git",
                     "remote" => remote,
                     "tag" => tag,
@@ -325,15 +512,30 @@ function generate_bazel_lockfile(
                 rethrow(e)
             end
 
+            pkg_entry = Dict{String, Any}(
+                "type" => "http",
+                "urls" => [url],
+                "integrity" => integrity_value,
+                "deps" => sort(deps),
+                "version" => version,
+                "uuid" => uuid,
+            )
+
+            # For JLL packages, extract artifact information
+            if endswith(name, "_jll")
+                pkg_source = find_package_source(name, uuid, tree_hash)
+                if pkg_source !== nothing
+                    artifacts = extract_jll_artifacts(pkg_source, name)
+                    if artifacts !== nothing
+                        pkg_entry["artifacts"] = artifacts
+                    end
+                else
+                    @warn "Could not find source for JLL package $name"
+                end
+            end
+
             lock(lockfile_lock) do
-                lockfile[name] = Dict(
-                    "type" => "http",
-                    "urls" => [url],
-                    "integrity" => integrity_value,
-                    "deps" => sort(deps),
-                    "version" => version,
-                    "uuid" => uuid,
-                )
+                lockfile[name] = pkg_entry
             end
         end
     end
@@ -394,6 +596,10 @@ function generate_manifest(
     # Coder-supplied token for the first time
     if !isempty(registries)
         println("Adding additional registries...")
+        # The General registry is auto-added only if there are no registries already
+        # configured in the depot. We have registries to add, so make sure General makes It
+        # in.
+        Pkg.Registry.add("General")
     end
     try
         for reg in registries
@@ -427,6 +633,8 @@ function generate_manifest(
 
     # Resolve and install dependencies
     # This creates a Manifest.toml with resolved versions
+    # Note: instantiate() also downloads artifacts to the depot, but we need them
+    # explicitly in Bazel so we extract their info separately
     Pkg.instantiate()
     Pkg.resolve()
 
@@ -447,6 +655,7 @@ function generate_manifest(
 
     println()
     println("Generating Bazel lockfile with integrity values...")
+    println("(JLL packages will also have artifact download info extracted)")
     println()
     generate_bazel_lockfile(packages, manifest_bazel_json_path, private_registry_lookup)
 
