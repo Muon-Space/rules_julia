@@ -595,7 +595,6 @@ function setup_julia_environment(include_paths, runfiles_dir, manifest_toml_path
     open(joinpath(env_dir, "Manifest.toml"), "w") do f
         TOML.print(f, manifest)
     end
-    TOML.print(stdout, manifest)
 
     @debug "Created environment at $env_dir"
 

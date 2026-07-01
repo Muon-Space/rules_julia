@@ -247,7 +247,7 @@ function extract_jll_artifacts(pkg_source_path, pkg_name)
     )
 
     if isempty(selected_artifacts)
-        println("No artifacts match host platform $host_triplet")
+        println("No artifacts match host platform $host_triplet for $pkg_name")
         return nothing
     end
 
@@ -327,7 +327,6 @@ function find_package_source(pkg_name::String, uuid, tree_hash::String)
     for depot in DEPOT_PATH
         ver_slug = version_slug(uuid, tree_hash)
         pkg_path = joinpath(depot, "packages", pkg_name, ver_slug)
-        println(pkg_path)
         if isdir(pkg_path)
             return pkg_path
         end
