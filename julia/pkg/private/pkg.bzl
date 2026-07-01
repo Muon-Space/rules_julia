@@ -193,6 +193,22 @@ filegroup(
     srcs = [":files", ":metadata"],
     visibility = ["//visibility:public"],
 )
+
+# C++ integration: headers and shared libraries from the artifact
+# This target can be used as a dep in cc_library/cc_binary rules
+cc_library(
+    name = "cc",
+    hdrs = glob(["include/**/*.hpp", "include/**/*.h"], allow_empty = True),
+    includes = ["include"],
+    # srcs = glob(["lib/**/libcxxwrap_julia.so"], exclude = ["lib/*.so.*"], allow_empty = True),
+    visibility = ["//visibility:public"],
+)
+
+# Make libcxxwrap_julia accessible for cc_import
+exports_files(
+    glob(["lib/*.so", "lib/*.so.*"], allow_empty = True),
+    visibility = ["//visibility:public"],
+)
 """
 
 def _pkg_hub_impl(repository_ctx):

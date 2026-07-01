@@ -45,6 +45,26 @@ alias(
     actual = ":toolchain",
     visibility = ["//visibility:public"],
 )
+
+# C++ integration
+cc_library(
+    name = "julia_headers",
+    hdrs = glob(["include/julia/**/*.h"]),
+    includes = ["include/julia"],  # jlcxx does #include <julia.h>, not <julia/julia.h>
+    visibility = ["//visibility:public"],
+)
+
+cc_import(
+    name = "julia_lib",
+    shared_library = "lib/libjulia.so",
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "julia_cc",
+    deps = [":julia_headers", ":julia_lib"],
+    visibility = ["//visibility:public"],
+)
 """
 
 def julia_toolchain_repository(*, name, version, triplet, url, integrity):
