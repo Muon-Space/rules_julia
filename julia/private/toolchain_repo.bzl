@@ -22,6 +22,8 @@ JULIA_VERSIONS = _JULIA_VERSIONS
 
 _JULIA_TOOLCHAIN_BUILD_FILE_CONTENT = """\
 load("@rules_julia//julia:julia_toolchain.bzl", "julia_toolchain")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_cc//cc:cc_import.bzl", "cc_import")
 
 filegroup(
     name = "julia_bin",
