@@ -59,22 +59,25 @@ def _julia_binary_wrapper_impl(ctx):
     substitutions = {}
     file_substitutions = {}
 
-    is_windows = ctx.file.template.basename.endswith(".bat.tpl")
-    if is_windows:
-        output = ctx.actions.declare_file("{}.bat".format(ctx.label.name))
-        batch_runfiles = ctx.file._batch_runfiles
-        file_substitutions["@REM {RUNFILES_API}"] = batch_runfiles.path
-        inputs.append(batch_runfiles)
-    else:
-        sh_toolchain = ctx.toolchains["@rules_shell//shell:toolchain_type"]
-        if sh_toolchain:
-            shebang = "#!{}".format(sh_toolchain.path)
-            substitutions["#!/usr/bin/env bash"] = shebang
+    # We will never run this on Windows and rules_batch causes problematic dependency
+    # requirements in muware-mono; in particular, it would require an upgrade to
+    # bazel_skylib v1.9.0
+    # is_windows = ctx.file.template.basename.endswith(".bat.tpl")
+    # if is_windows:
+    #     output = ctx.actions.declare_file("{}.bat".format(ctx.label.name))
+    #     batch_runfiles = ctx.file._batch_runfiles
+    #     file_substitutions["@REM {RUNFILES_API}"] = batch_runfiles.path
+    #     inputs.append(batch_runfiles)
+    # else:
+    sh_toolchain = ctx.toolchains["@rules_shell//shell:toolchain_type"]
+    if sh_toolchain:
+        shebang = "#!{}".format(sh_toolchain.path)
+        substitutions["#!/usr/bin/env bash"] = shebang
 
-        output = ctx.actions.declare_file("{}.sh".format(ctx.label.name))
-        bash_runfiles = _find_bash_runfiles(ctx.attr._bash_runfiles)
-        file_substitutions["# {RUNFILES_API}"] = bash_runfiles.path
-        inputs.append(bash_runfiles)
+    output = ctx.actions.declare_file("{}.sh".format(ctx.label.name))
+    bash_runfiles = _find_bash_runfiles(ctx.attr._bash_runfiles)
+    file_substitutions["# {RUNFILES_API}"] = bash_runfiles.path
+    inputs.append(bash_runfiles)
 
     args = ctx.actions.args()
     args.add(ctx.file._maker)
@@ -118,12 +121,12 @@ julia_binary_wrapper = rule(
             aspects = [_bash_runfiles_finder],
             default = Label("@rules_shell//shell/runfiles"),
         ),
-        "_batch_runfiles": attr.label(
-            doc = "The runfiles library for batch.",
-            cfg = "target",
-            allow_single_file = [".bat"],
-            default = Label("@rules_batch//batch/runfiles:runfiles.bat"),
-        ),
+        # "_batch_runfiles": attr.label(
+        #     doc = "The runfiles library for batch.",
+        #     cfg = "target",
+        #     allow_single_file = [".bat"],
+        #     default = Label("@rules_batch//batch/runfiles:runfiles.bat"),
+        # ),
         "_julia_toolchain_exec": attr.label(
             cfg = "exec",
             default = Label("//julia:current_julia_toolchain"),
