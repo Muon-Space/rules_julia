@@ -218,11 +218,12 @@ match the host platform, then extracts download URLs and SHA256 hashes.
 Args:
     pkg_source_path: Path to the installed package source directory
     pkg_name: Name of the package (for debugging)
+    pkg_uuid: UUID of the package (enables platform augmentation, used by HDF5_jll)
 
 Returns:
     Dict{String, Any}: Mapping of artifact names to their download info for the host platform
 """
-function extract_jll_artifacts(pkg_source_path, pkg_name)
+function extract_jll_artifacts(pkg_source_path, pkg_name, pkg_uuid)
 
     artifacts_toml_path = joinpath(pkg_source_path, "Artifacts.toml")
 
@@ -239,11 +240,13 @@ function extract_jll_artifacts(pkg_source_path, pkg_name)
     # Use Julia's built-in artifact selection to get artifacts for the host platform
     # select_downloadable_artifacts returns a Dict{String, Any} where keys are artifact names
     # and values contain the download info for the matching platform
+    # Passing pkg_uuid enables platform augmentation (e.g., HDF5_jll uses this to select MPI variant)
     host_platform = HostPlatform()
     selected_artifacts = Pkg.Artifacts.select_downloadable_artifacts(
         artifacts_toml_path;
         platform = host_platform,
-        include_lazy = false  # Skip lazy artifacts as they may not be needed at build time
+        include_lazy = false,  # Skip lazy artifacts as they may not be needed at build time
+        pkg_uuid = Base.UUID(pkg_uuid)  # Enables platform augmentation for correct variant selection
     )
 
     if isempty(selected_artifacts)
@@ -524,7 +527,11 @@ function generate_bazel_lockfile(
             if endswith(name, "_jll")
                 pkg_source = find_package_source(name, uuid, tree_hash)
                 if pkg_source !== nothing
-                    artifacts = extract_jll_artifacts(pkg_source, name)
+                    artifacts = extract_jll_artifacts(
+                        pkg_source,
+                        name,
+                        uuid
+                    )
                     if artifacts !== nothing
                         pkg_entry["artifacts"] = artifacts
                     end
