@@ -61,9 +61,7 @@ julia_library(
     ),
     data = glob(
         include = [
-            "*",
-            "src/**",
-            "ext/**",
+            "**",
         ],
         exclude = [
             "*.jl",
@@ -73,6 +71,12 @@ julia_library(
             "BUILD.bazel",
             "WORKSPACE",
             "WORKSPACE.bazel",
+            "LICENSE",
+            "README.md",
+            "**/docs/**",
+            "**/contrib/**",
+            "**/test/**",
+            "**/.*",
         ],
         allow_empty = True,
     ),
@@ -136,9 +140,7 @@ julia_library(
     ),
     data = glob(
         include = [
-            "*",
-            "src/**",
-            "ext/**",
+            "**",
         ],
         exclude = [
             "*.jl",
@@ -148,6 +150,12 @@ julia_library(
             "BUILD.bazel",
             "WORKSPACE",
             "WORKSPACE.bazel",
+            "LICENSE",
+            "README.md",
+            "**/docs/**",
+            "**/contrib/**",
+            "**/test/**",
+            "**/.*",
         ],
         allow_empty = True,
     ){artifact_data},
