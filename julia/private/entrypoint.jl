@@ -575,6 +575,15 @@ function setup_julia_environment(include_paths, runfiles_dir, manifest_toml_path
     # Copy original Project.toml
     cp(project_toml_path, joinpath(env_dir, "Project.toml"))
     cp(joinpath(dirname(project_toml_path), "src"), joinpath(env_dir, "src"))
+
+    # Copy LocalPreferences.toml if it exists (for MPI variant selection, etc.)
+    # This ensures runtime platform augmentation selects the same artifact variant
+    # that was downloaded at build time.
+    local_prefs_path = joinpath(dirname(project_toml_path), "LocalPreferences.toml")
+    if isfile(local_prefs_path)
+        cp(local_prefs_path, joinpath(env_dir, "LocalPreferences.toml"))
+        @debug "Copied LocalPreferences.toml to spliced environment"
+    end
     # In this temp dir, we only have Project.toml and Manifest.toml; we don't have any
     # source files, and Pkg will attempt to check src/[Package].jl for the root package's primary
     # file. To prevent that, we create a synthetic Project.toml that lists the root package
