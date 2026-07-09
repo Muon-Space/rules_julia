@@ -592,6 +592,13 @@ function generate_manifest(
     temp_project = joinpath(temp_env, "Project.toml")
     cp(project_toml_path, temp_project)
 
+    # Copy LocalPreferences.toml if it exists (for MPI variant selection, etc.)
+    local_prefs_path = joinpath(dirname(project_toml_path), "LocalPreferences.toml")
+    if isfile(local_prefs_path)
+        println("Copying LocalPreferences.toml to temp environment...")
+        cp(local_prefs_path, joinpath(temp_env, "LocalPreferences.toml"))
+    end
+
     println("Resolving dependencies...")
 
     # Activate the temporary environment
