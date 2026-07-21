@@ -57,7 +57,7 @@ def create_artifact_repos(module_ctx, hub_name, package_name, package_uuid, arti
         git_tree_sha1 = artifact_info.get("git_tree_sha1", "")
         downloads = artifact_info.get("download", [])
 
-        # Skip lazy artifacts (optional, not required for basic usage)
+        # Skip lazy artifacts
         if artifact_info.get("lazy", False):
             continue
 
@@ -66,10 +66,11 @@ def create_artifact_repos(module_ctx, hub_name, package_name, package_uuid, arti
 
         # Check if this platform is supported by Bazel
         if platform_key not in _PLATFORM_TO_CONSTRAINTS:
-            # Try to map to a supported platform
+            # TODO: Try to map to a supported platform
             continue
 
-        # Get first download URL and sha256
+        # Get first download URL and sha256 (there should only be one, since we've narrowed
+        # down the artifact list to those identified by Julia as matching this host)
         download_info = downloads[0]
         url = download_info.get("url", "")
         sha256 = download_info.get("sha256", "")
