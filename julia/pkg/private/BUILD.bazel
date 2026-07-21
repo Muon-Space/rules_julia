@@ -6,13 +6,18 @@ exports_files(["pkg_tester.jl"])
 bzl_library(
     name = "bazel_tools_bzl_lib",
     srcs = ["@bazel_tools//tools:bzl_srcs"],
+    visibility = ["//extras/pkg:__pkg__"],
 )
 
 bzl_library(
     name = "bzl_lib",
     srcs = glob(["*.bzl"]),
     visibility = ["//julia/pkg:__pkg__"],
-    deps = [":bazel_tools_bzl_lib"],
+    deps = [
+        ":bazel_tools_bzl_lib",
+        "//extras/build_templates:bzl_lib",
+        "//extras/pkg:bzl_lib",
+    ],
 )
 
 julia_binary(
