@@ -95,6 +95,10 @@ the test will fail with detailed error messages indicating what needs to be fixe
             default = Label("//julia/private:entrypoint.jl"),
             allow_single_file = True,
         ),
+        "_entrypoint_utils": attr.label(
+            default = Label("//julia/private:entrypoint_utils.jl"),
+            allow_single_file = True,
+        ),
         "_test_runner": attr.label(
             doc = "The pkg test runner binary.",
             cfg = "target",

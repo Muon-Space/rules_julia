@@ -133,6 +133,10 @@ julia_binary = rule(
             default = Label("//julia/private:entrypoint.jl"),
             allow_single_file = True,
         ),
+        "_entrypoint_utils": attr.label(
+            default = Label("//julia/private:entrypoint_utils.jl"),
+            allow_single_file = True,
+        ),
         "_wrapper_template": attr.label(
             default = Label("//julia/private:binary_wrapper.tpl"),
             allow_single_file = True,
@@ -185,6 +189,10 @@ julia_test = rule(
         ),
         "_entrypoint": attr.label(
             default = Label("//julia/private:entrypoint.jl"),
+            allow_single_file = True,
+        ),
+        "_entrypoint_utils": attr.label(
+            default = Label("//julia/private:entrypoint_utils.jl"),
             allow_single_file = True,
         ),
         "_wrapper_template": attr.label(

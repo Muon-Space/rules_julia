@@ -3,6 +3,7 @@
 load(":providers.bzl", "JuliaInfo")
 load(":rlocation.bzl", "rlocationpath")
 load(":toolchain.bzl", "TOOLCHAIN_TYPE")
+load(":julia_common_utils.bzl", "collect_manifest_toml")
 
 _rlocationpath = rlocationpath
 
@@ -70,24 +71,6 @@ def _collect_includes(deps):
     return depset(
         transitive = [dep[JuliaInfo].includes for dep in deps if JuliaInfo in dep],
     )
-
-def _collect_manifest_toml(deps):
-    """Collect manifest_toml and project_toml from first dependency that has them.
-
-    Args:
-        deps: List of dependency targets.
-
-    Returns:
-        tuple: (manifest_toml, project_toml) rlocation paths, or (None, None) if not found.
-    """
-    for dep in deps:
-        if JuliaInfo in dep:
-            info = dep[JuliaInfo]
-            manifest = getattr(info, "manifest_toml", None)
-            project = getattr(info, "project_toml", None)
-            if manifest:
-                return (manifest, project)
-    return (None, None)
 
 def _get_include(ctx, srcs = []):
     """Get the include path for the current target.
@@ -273,13 +256,13 @@ def _create_julia_binary_impl(
             runfiles = runfiles.merge(data_target[DefaultInfo].default_runfiles)
 
     # Collect manifest_toml and project_toml from dependencies
-    manifest_toml, project_toml = _collect_manifest_toml(deps)
+    manifest_toml, project_toml = collect_manifest_toml(deps)
 
     config = _create_config_file(ctx, includes, runfiles, manifest_toml, project_toml)
 
     wrapper = _create_julia_wrapper(ctx, main_file, config, toolchain_info)
 
-    extra_runfiles = [config, ctx.file._entrypoint]
+    extra_runfiles = [config, ctx.file._entrypoint, ctx.file._entrypoint_utils]
 
     return [
         JuliaInfo(

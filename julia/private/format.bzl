@@ -201,6 +201,10 @@ julia_format_test = rule(
             default = Label("//julia/private:entrypoint.jl"),
             allow_single_file = True,
         ),
+        "_entrypoint_utils": attr.label(
+            default = Label("//julia/private:entrypoint_utils.jl"),
+            allow_single_file = True,
+        ),
         "_test_runner": attr.label(
             doc = "The format checker binary.",
             cfg = "target",

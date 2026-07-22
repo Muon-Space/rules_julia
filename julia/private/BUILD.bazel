@@ -6,6 +6,7 @@ exports_files([
     "binary_wrapper.sh.tpl",
     "binary_wrapper_maker.jl",
     "entrypoint.jl",
+    "entrypoint_utils.jl",
 ])
 
 # This target exists only to get picked up by the formatter.
@@ -13,7 +14,7 @@ exports_files([
 # real Julia targets.
 filegroup(
     name = "entrypoint",
-    srcs = ["entrypoint.jl"],
+    srcs = ["entrypoint.jl", "entrypoint_utils.jl"],
 )
 
 julia_binary_wrapper(

@@ -13,7 +13,7 @@ using Base64
 using Downloads
 using TOML
 
-include("../../../extras/julia/pkg_compiler.jl")
+include("./pkg_compiler_utils.jl")
 
 function parse_args()
     """Parse command-line arguments from environment variables and command line flags."""
@@ -21,10 +21,7 @@ function parse_args()
 
     # Required environment variables set by the Bazel rule
     required_vars =
-        [
-            "RULES_JULIA_PKG_COMPILER_PROJECT_TOML",
-            "RULES_JULIA_PKG_COMPILER_MANIFEST_TOML",
-        ]
+        ["RULES_JULIA_PKG_COMPILER_PROJECT_TOML", "RULES_JULIA_PKG_COMPILER_MANIFEST_TOML"]
 
     for var in required_vars
         if !haskey(ENV, var)
@@ -208,7 +205,7 @@ Args:
 function generate_bazel_lockfile(
     packages::Dict{String,Any},
     output_path::String,
-    private_registry_lookup = Dict{String,String}()
+    private_registry_lookup = Dict{String,String}(),
 )
 
     lockfile = Dict{String,Any}()
@@ -238,7 +235,7 @@ function generate_bazel_lockfile(
             flush(stdout)
 
             lock(lockfile_lock) do
-                lockfile[name] = Dict{String, Any}(
+                lockfile[name] = Dict{String,Any}(
                     "type" => "git",
                     "remote" => remote,
                     "tag" => tag,
@@ -261,7 +258,7 @@ function generate_bazel_lockfile(
                 rethrow(e)
             end
 
-            pkg_entry = Dict{String, Any}(
+            pkg_entry = Dict{String,Any}(
                 "type" => "http",
                 "urls" => [url],
                 "integrity" => integrity_value,
@@ -274,11 +271,7 @@ function generate_bazel_lockfile(
             if endswith(name, "_jll")
                 pkg_source = find_package_source(name, uuid, tree_hash)
                 if pkg_source !== nothing
-                    artifacts = extract_jll_artifacts(
-                        pkg_source,
-                        name,
-                        uuid
-                    )
+                    artifacts = extract_jll_artifacts(pkg_source, name, uuid)
                     if artifacts !== nothing
                         pkg_entry["artifacts"] = artifacts
                     end
@@ -444,7 +437,13 @@ function main()
     registries = args["registries"]
 
     # Generate Manifest.toml and Manifest.bazel.json
-    generate_manifest(project_toml, manifest_toml, manifest_bazel_json, registries, packages_to_add)
+    generate_manifest(
+        project_toml,
+        manifest_toml,
+        manifest_bazel_json,
+        registries,
+        packages_to_add,
+    )
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__
