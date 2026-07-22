@@ -15,7 +15,6 @@ bzl_library(
     visibility = ["//julia/pkg:__pkg__"],
     deps = [
         ":bazel_tools_bzl_lib",
-        "//extras/build_templates:bzl_lib",
         "//extras/pkg:bzl_lib",
     ],
 )

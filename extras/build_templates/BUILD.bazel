@@ -2,9 +2,7 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
 exports_files([
     "artifact.bzl",
-    "hub.bzl",
     "jll.bzl",
-    "pkg.bzl",
 ])
 
 bzl_library(
@@ -12,6 +10,6 @@ bzl_library(
     srcs = glob(["*.bzl"]),
     visibility = [
         "//extras/pkg:__pkg__",
-        "//julia/pkg/private:__pkg__"
+        # "//julia/pkg/private:__pkg__"
     ],
 )
