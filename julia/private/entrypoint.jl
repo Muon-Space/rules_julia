@@ -4,6 +4,7 @@ module RulesJuliaInit
 import TOML
 import Pkg
 import UUIDs: UUID
+import Base: @debug
 
 # Check if debug logging is enabled
 const DEBUG = haskey(ENV, "RULES_JULIA_DEBUG")
