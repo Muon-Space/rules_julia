@@ -2,7 +2,7 @@
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("//extras/pkg:pkg.bzl",
+load(":pkg_utils.bzl",
     "add_annotation_args",
     "create_artifact_repos",
     "generate_jll_build_file",
