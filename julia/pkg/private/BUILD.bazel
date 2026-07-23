@@ -21,7 +21,10 @@ bzl_library(
 
 julia_binary(
     name = "pkg_compiler",
-    srcs = ["pkg_compiler.jl"],
+    srcs = [
+        "pkg_compiler.jl",
+        "pkg_compiler_utils.jl",
+    ],
     visibility = ["//visibility:public"],
 )
 
