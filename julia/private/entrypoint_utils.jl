@@ -283,24 +283,19 @@ function setup_julia_environment(include_paths, runfiles_dir, manifest_toml_path
     # that was downloaded at build time.
     local_prefs_path = joinpath(dirname(project_toml_path), "LocalPreferences.toml")
     if isfile(local_prefs_path)
-        cp(local_prefs_path, joinpath(env_dir, "LocalPreferences.toml"))
-        @debug "Copied LocalPreferences.toml to spliced environment"
+        content = read(local_prefs_path, String)
+        # Expand __RUNFILES_DIR__ placeholders before writing
+        # Using the regular cp() Julia function mysteriously results in altering the
+        # contents of the source LocalPreferences.toml (are these symlinks?). Writing to
+        # dest_path avoids this.
+        if occursin("__RUNFILES_DIR__", content)
+            content = replace(content, "__RUNFILES_DIR__" => runfiles_dir)
+            @debug "Expanded __RUNFILES_DIR__ in LocalPreferences.toml" runfiles_dir
+        end
+        dest_path = joinpath(env_dir, "LocalPreferences.toml")
+        write(dest_path, content)
+        @debug "Wrote LocalPreferences.toml to env_dir" dest_path
     end
-    # In this temp dir, we only have Project.toml and Manifest.toml; we don't have any
-    # source files, and Pkg will attempt to check src/[Package].jl for the root package's primary
-    # file. To prevent that, we create a synthetic Project.toml that lists the root package
-    # as a dependency
-    # proj_data = TOML.parsefile(project_toml_path)
-    # deps = Dict{String,Any}(get(proj_data, "deps", Dict{String,Any}()))
-    # root_name = get(proj_data, "name", nothing)
-    # root_uuid = get(proj_data, "uuid", nothing)
-    # if root_name !== nothing && root_uuid !== nothing
-    #     deps[root_name] = root_uuid
-    # end
-    # synthetic = Dict{String,Any}("deps" => deps)
-    # open(joinpath(env_dir, "Project.toml"), "w") do f
-    #     TOML.print(f, synthetic)
-    # end
 
     # Write modified Manifest.toml
     open(joinpath(env_dir, "Manifest.toml"), "w") do f
