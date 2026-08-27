@@ -46,14 +46,13 @@ _PLATFORM_TO_CONSTRAINTS = {
     "x86_64-linux-musl": ["@platforms//os:linux", "@platforms//cpu:x86_64"],
 }
 
-def create_artifact_repos(module_ctx, hub_name, package_name, package_uuid, artifacts):
+def create_artifact_repos(hub_name, package_name, package_uuid, artifacts):
     """Create http_archive repos for each artifact.
 
     The artifacts dict now contains only the host platform's artifacts (pre-filtered
     by select_downloadable_artifacts() in the Julia manifest compiler).
 
     Args:
-        module_ctx: The module context.
         hub_name: Name of the package hub.
         package_name: Name of the JLL package (e.g., "boost_jll").
         package_uuid: UUID of the JLL package.

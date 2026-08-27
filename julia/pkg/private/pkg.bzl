@@ -172,7 +172,6 @@ def install(*, module_ctx, attrs, annotations = {}):
         artifact_repos = {}
         if is_jll_with_artifacts:
             artifact_repos = create_artifact_repos(
-                module_ctx,
                 attrs.name,
                 package_name,
                 uuid,
