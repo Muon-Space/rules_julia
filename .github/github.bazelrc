@@ -17,4 +17,4 @@ common --show_timestamps
 # `JuliaStandaloneCompile` is resource intensive and causes
 # github actions to run out of memory. For now we eliminate
 # parallelism
-build --jobs=1
+build --jobs=2
