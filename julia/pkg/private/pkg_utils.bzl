@@ -1,10 +1,11 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("//build_templates:artifact.bzl", "ARTIFACT_BUILD_FILE")
-load("//build_templates:jll.bzl",
-    "JLL_PKG_BUILD_FILE_HEADER",
-    "JLL_PKG_BUILD_FILE_CONFIG_SETTING",
+load(
+    "//build_templates:jll.bzl",
     "JLL_PKG_BUILD_FILE_ARTIFACT_SELECT",
+    "JLL_PKG_BUILD_FILE_CONFIG_SETTING",
     "JLL_PKG_BUILD_FILE_FOOTER",
+    "JLL_PKG_BUILD_FILE_HEADER",
 )
 
 def add_annotation_args(package_args, package_annotations):
@@ -94,6 +95,7 @@ def create_artifact_repos(module_ctx, hub_name, package_name, package_uuid, arti
             "platform_key": platform_key,
         }
         metadata_json = json.encode(metadata)
+
         # Escape for shell embedding
         metadata_json_escaped = metadata_json.replace("\\", "\\\\").replace("'", "'\\''")
 

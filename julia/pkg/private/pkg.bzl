@@ -2,7 +2,8 @@
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load(":pkg_utils.bzl",
+load(
+    ":pkg_utils.bzl",
     "add_annotation_args",
     "create_artifact_repos",
     "generate_jll_build_file",
@@ -222,7 +223,7 @@ def install(*, module_ctx, attrs, annotations = {}):
             if package_annotations:
                 git_repository_args = add_annotation_args(
                     git_repository_args,
-                    package_annotations
+                    package_annotations,
                 )
 
             git_repository(**git_repository_args)
@@ -247,7 +248,7 @@ def install(*, module_ctx, attrs, annotations = {}):
             if package_annotations:
                 http_archive_args = add_annotation_args(
                     http_archive_args,
-                    package_annotations
+                    package_annotations,
                 )
 
             http_archive(**http_archive_args)

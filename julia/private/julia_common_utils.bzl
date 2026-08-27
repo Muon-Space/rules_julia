@@ -17,4 +17,3 @@ def collect_manifest_toml(deps):
             if manifest:
                 return (manifest, project)
     return (None, None)
-    

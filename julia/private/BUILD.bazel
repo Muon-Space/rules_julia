@@ -14,7 +14,10 @@ exports_files([
 # real Julia targets.
 filegroup(
     name = "entrypoint",
-    srcs = ["entrypoint.jl", "entrypoint_utils.jl"],
+    srcs = [
+        "entrypoint.jl",
+        "entrypoint_utils.jl",
+    ],
 )
 
 julia_binary_wrapper(

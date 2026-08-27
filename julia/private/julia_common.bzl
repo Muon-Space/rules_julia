@@ -1,9 +1,9 @@
 """Common utilities for Julia rules."""
 
+load(":julia_common_utils.bzl", "collect_manifest_toml")
 load(":providers.bzl", "JuliaInfo")
 load(":rlocation.bzl", "rlocationpath")
 load(":toolchain.bzl", "TOOLCHAIN_TYPE")
-load(":julia_common_utils.bzl", "collect_manifest_toml")
 
 _rlocationpath = rlocationpath
 

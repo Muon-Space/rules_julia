@@ -5,8 +5,9 @@ load("//julia/pkg/private:julia_pkg_compile_info.bzl", "JuliaPkgCompileInfo")
 def _julia_pkg_compiler_impl(ctx):
     project_toml = ctx.file.project_toml
     manifest_toml = ctx.file.manifest_toml
+
     # comma-separated string of all added registries
-    registries = ','.join(ctx.attr.registries)
+    registries = ",".join(ctx.attr.registries)
 
     if not project_toml.is_source:
         fail("`project_toml` cannot be generated. Please update it to be a source file for {}".format(ctx.label))
