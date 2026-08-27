@@ -24,12 +24,12 @@ def _sanitize_platform_key(platform_key):
 # Mapping from Julia platform keys to Bazel config_setting constraint values
 # We'll leave macos in here to at least have a chance of being able to build those
 _PLATFORM_TO_CONSTRAINTS = {
-    "x86_64-linux-gnu": ["@platforms//os:linux", "@platforms//cpu:x86_64"],
-    "x86_64-linux-musl": ["@platforms//os:linux", "@platforms//cpu:x86_64"],
+    "aarch64-apple-darwin": ["@platforms//os:macos", "@platforms//cpu:aarch64"],
     "aarch64-linux-gnu": ["@platforms//os:linux", "@platforms//cpu:aarch64"],
     "aarch64-linux-musl": ["@platforms//os:linux", "@platforms//cpu:aarch64"],
     "x86_64-apple-darwin": ["@platforms//os:macos", "@platforms//cpu:x86_64"],
-    "aarch64-apple-darwin": ["@platforms//os:macos", "@platforms//cpu:aarch64"],
+    "x86_64-linux-gnu": ["@platforms//os:linux", "@platforms//cpu:x86_64"],
+    "x86_64-linux-musl": ["@platforms//os:linux", "@platforms//cpu:x86_64"],
 }
 
 def create_artifact_repos(module_ctx, hub_name, package_name, package_uuid, artifacts):
@@ -88,10 +88,10 @@ def create_artifact_repos(module_ctx, hub_name, package_name, package_uuid, arti
 
         # Build metadata JSON for runtime
         metadata = {
-            "pkg_name": package_name,
-            "pkg_uuid": package_uuid,
             "artifact_name": artifact_name,
             "git_tree_sha1": git_tree_sha1,
+            "pkg_name": package_name,
+            "pkg_uuid": package_uuid,
             "platform_key": platform_key,
         }
         metadata_json = json.encode(metadata)
