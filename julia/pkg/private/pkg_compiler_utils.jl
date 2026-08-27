@@ -11,7 +11,7 @@ Returns:
 """
 function build_private_registry_lookup()
 
-    lookup = Dict{String, String}()
+    lookup = Dict{String,String}()
 
     for reg in Pkg.Registry.reachable_registries()
         if reg.name == "General"
@@ -53,19 +53,20 @@ function normalize_git_url(repo_url::String)
     # Convert SSH format to HTTPS
     # SSH: muonspace@muonspace.ghe.com:Muon-Space/Pkg.jl.git
     # HTTPS: https://muonspace.ghe.com/Muon-Space/Pkg.jl.git
-    http_url = replace(
-        base_url,
-        "muonspace@muonspace.ghe.com:" => "https://muonspace.ghe.com/"
-    )
+    http_url =
+        replace(base_url, "muonspace@muonspace.ghe.com:" => "https://muonspace.ghe.com/")
     return http_url
 end
 
 write_json_value(io::IO, value, args...) = error("Unsupported JSON type: $(typeof(value))")
-write_json_value(io::IO, value::AbstractString, args...) = write(io, "\"", escape_json_string(value), "\"")
+write_json_value(io::IO, value::AbstractString, args...) =
+    write(io, "\"", escape_json_string(value), "\"")
 write_json_value(io::IO, value::Bool, args...) = write(io, value ? "true" : "false")
 write_json_value(io::IO, value::Number, args...) = write(io, string(value))
-write_json_value(io::IO, value::AbstractVector, indent::AbstractString) = write_json_array(io, value, indent)
-write_json_value(io::IO, value::AbstractDict, indent::AbstractString) = write_json_object(io, value, indent)
+write_json_value(io::IO, value::AbstractVector, indent::AbstractString) =
+    write_json_array(io, value, indent)
+write_json_value(io::IO, value::AbstractDict, indent::AbstractString) =
+    write_json_object(io, value, indent)
 write_json_value(io::IO, ::Nothing, args...) = write(io, "null")
 
 """
@@ -132,7 +133,7 @@ function extract_jll_artifacts(pkg_source_path, pkg_name, pkg_uuid)
         artifacts_toml_path;
         platform = host_platform,
         include_lazy = false,  # Skip lazy artifacts as they may not be needed at build time
-        pkg_uuid = Base.UUID(pkg_uuid)  # Enables platform augmentation for correct variant selection
+        pkg_uuid = Base.UUID(pkg_uuid),  # Enables platform augmentation for correct variant selection
     )
 
     if isempty(selected_artifacts)
@@ -140,7 +141,7 @@ function extract_jll_artifacts(pkg_source_path, pkg_name, pkg_uuid)
         return nothing
     end
 
-    result = Dict{String, Any}()
+    result = Dict{String,Any}()
 
     for (artifact_name, artifact_info) in selected_artifacts
 
@@ -156,7 +157,7 @@ function extract_jll_artifacts(pkg_source_path, pkg_name, pkg_uuid)
         # keep this info around
         platform_key = join(split(host_triplet, "-")[1:3], "-")
 
-        artifact_entry = Dict{String, Any}(
+        artifact_entry = Dict{String,Any}(
             "git_tree_sha1" => git_tree_sha1,
             "platform_key" => platform_key,
         )
@@ -168,7 +169,7 @@ function extract_jll_artifacts(pkg_source_path, pkg_name, pkg_uuid)
                 if !(dl isa Dict)
                     continue
                 end
-                dl_info = Dict{String, String}()
+                dl_info = Dict{String,String}()
                 if haskey(dl, "url")
                     dl_info["url"] = dl["url"]
                 end
@@ -227,7 +228,7 @@ const slug_chars = String(['A':'Z'; 'a':'z'; '0':'9'])
 
 function slug(x::UInt32, p::Int)
     y::UInt32 = x
-    sprint(sizehint=p) do io
+    sprint(sizehint = p) do io
         n = length(slug_chars)
         for i = 1:p
             y, d = divrem(y, n)
@@ -244,11 +245,11 @@ Get the 5 character slug used to differentiate package versions in the Julia dep
 Package code is stored at the path "DEPOT_PATH/package/slug". This code is taken from
 Julia's loading.jl in Base.
 """
-function version_slug(uuid, git_tree_sha1, p=5)
+function version_slug(uuid, git_tree_sha1, p = 5)
     sha1_hash = hex2bytes(git_tree_sha1)
     return version_slug(Base.UUID(uuid), sha1_hash, p)
 end
-function version_slug(uuid::Base.UUID, sha1::Vector{UInt8}, p=5)
+function version_slug(uuid::Base.UUID, sha1::Vector{UInt8}, p = 5)
     crc = Base._crc32c(sha1, Base._crc32c(uuid))
     return slug(crc, p)
 end

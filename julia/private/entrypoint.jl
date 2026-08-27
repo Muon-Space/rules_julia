@@ -293,10 +293,16 @@ function compute_includes(config_path)
     end
 
     # Resolve manifest_toml and project_toml to absolute paths if provided
-    manifest_toml_path = !isempty(manifest_toml) ? normpath(joinpath(runfiles_dir, manifest_toml)) : ""
-    project_toml_path = !isempty(project_toml) ? normpath(joinpath(runfiles_dir, project_toml)) : ""
+    manifest_toml_path =
+        !isempty(manifest_toml) ? normpath(joinpath(runfiles_dir, manifest_toml)) : ""
+    project_toml_path =
+        !isempty(project_toml) ? normpath(joinpath(runfiles_dir, project_toml)) : ""
 
-    return runfiles_dir, include_paths, runfiles_paths, manifest_toml_path, project_toml_path
+    return runfiles_dir,
+    include_paths,
+    runfiles_paths,
+    manifest_toml_path,
+    project_toml_path
 end
 
 function initialize()
@@ -306,7 +312,8 @@ function initialize()
 
     # Compute includes
     @debug "Computing includes."
-    runfiles_dir, include_paths, runfiles_paths, manifest_toml_path, project_toml_path = compute_includes(config_path)
+    runfiles_dir, include_paths, runfiles_paths, manifest_toml_path, project_toml_path =
+        compute_includes(config_path)
 
     @debug "Runfiles dir: $(runfiles_dir)"
     @debug "JULIA_DEPOT_PATH: $(get(ENV, "JULIA_DEPOT_PATH", "<not set>"))"
@@ -316,7 +323,12 @@ function initialize()
     # Set up the synthetic Julia environment for proper Pkg metadata
     # This enables packages like Preferences.jl, JLLWrappers, etc. to work
     @debug "Setting up synthetic Julia environment."
-    setup_julia_environment(include_paths, runfiles_dir, manifest_toml_path, project_toml_path)
+    setup_julia_environment(
+        include_paths,
+        runfiles_dir,
+        manifest_toml_path,
+        project_toml_path,
+    )
 
     # Set up artifact overrides for JLL packages
     # This writes Overrides.toml so Julia can find Bazel-managed binary artifacts
