@@ -1,3 +1,7 @@
+"""
+Utilities intended to be used in julia_common.bzl.
+"""
+
 load(":providers.bzl", "JuliaInfo")
 
 def collect_manifest_toml(deps):

@@ -1,3 +1,7 @@
+"""
+A set of utilities intended to be used in pkg.bzl.
+"""
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("//build_templates:artifact.bzl", "ARTIFACT_BUILD_FILE")
 load(
@@ -9,6 +13,16 @@ load(
 )
 
 def add_annotation_args(package_args, package_annotations):
+    """Add annotation data to the package arguments.
+
+    Args:
+        package_args (dict): The set of arguments that get passed to either git_repository
+            or http_archive.
+        package_annotations (dict): Dictionary mapping package names to annotation data.
+
+    Returns:
+        dict: The modified package_args.
+    """
     if "patches" in package_annotations:
         package_args["patches"] = package_annotations["patches"]
     if "patch_args" in package_annotations:
