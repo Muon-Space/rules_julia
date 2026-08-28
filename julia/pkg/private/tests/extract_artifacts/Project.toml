@@ -1,0 +1,5 @@
+name = "ExtractArtifacts"
+version = "0.0.1"
+
+[deps]
+TestImages = "5e47fb64-e119-507b-a336-dd2b206d9990"

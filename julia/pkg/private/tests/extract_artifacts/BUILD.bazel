@@ -1,0 +1,35 @@
+load("//julia/pkg:julia_pkg_compiler.bzl", "julia_pkg_compiler")
+load("//julia/pkg:julia_pkg_test.bzl", "julia_pkg_test")
+load("//julia:julia_library.bzl", "julia_library")
+load("//julia:julia_test.bzl", "julia_test")
+
+julia_pkg_compiler(
+    name = "pkg_update",
+    manifest_bazel_json = "//julia/pkg/private/tests/extract_artifacts:Manifest.bazel.json",
+    manifest_toml = "//julia/pkg/private/tests/extract_artifacts:Manifest.toml",
+    project_toml = "//julia/pkg/private/tests/extract_artifacts:Project.toml",
+)
+
+julia_pkg_test(
+    name = "pkg_test",
+    compiler = ":pkg_update",
+)
+
+julia_library(
+    name = "extract_artifacts",
+    srcs = ["src/ExtractArtifacts.jl"],
+    manifest_toml = "Manifest.toml",
+    project_toml = "Project.toml",
+    deps = [
+        "@rules_julia_extr",
+    ],
+)
+
+julia_test(
+    name = "extract_artifacts_test",
+    srcs = ["test/runtests.jl"],
+    main = "test/runtests.jl",
+    deps = [
+        "//julia/pkg/private/tests/extract_artifacts:extract_artifacts",
+    ],
+)

@@ -45,5 +45,16 @@ use_repo(
     "rules_julia_fmt",
 )
 
+# Julia package dependencies for artifact extraction testing
+extr_deps = use_extension("//julia/pkg:extensions.bzl", "pkg")
+extr_deps.install(
+    name = "rules_julia_extr",
+    lockfile = "//julia/pkg/private/tests/extract_artifacts:Manifest.bazel.json",
+)
+use_repo(
+    extr_deps,
+    "rules_julia_extr",
+)
+
 bazel_dep(name = "stardoc", version = "0.8.0", dev_dependency = True, repo_name = "io_bazel_stardoc")
 bazel_dep(name = "rules_rust_mdbook", version = "0.69.0", dev_dependency = True)
