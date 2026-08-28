@@ -165,12 +165,10 @@ def install(*, module_ctx, attrs, annotations = {}):
         # Get annotations for this package if any
         package_annotations = annotations.get(package_name)
 
-        # Check if this is a JLL package with artifacts
-        is_jll_with_artifacts = artifacts and package_name.endswith("_jll")
 
         # Create artifact repos for JLL packages
         artifact_repos = {}
-        if is_jll_with_artifacts:
+        if artifacts:
             artifact_repos = create_artifact_repos(
                 attrs.name,
                 package_name,
@@ -179,7 +177,7 @@ def install(*, module_ctx, attrs, annotations = {}):
             )
 
         # Generate appropriate build file content
-        if is_jll_with_artifacts and artifact_repos:
+        if artifacts and artifact_repos:
             build_file_content = generate_jll_build_file(
                 package_name,
                 deps,

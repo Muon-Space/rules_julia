@@ -132,7 +132,7 @@ function extract_jll_artifacts(pkg_source_path, pkg_name, pkg_uuid)
     selected_artifacts = Pkg.Artifacts.select_downloadable_artifacts(
         artifacts_toml_path;
         platform = host_platform,
-        include_lazy = false,  # Skip lazy artifacts as they may not be needed at build time
+        include_lazy = true,  # Don't skip lazy artifacts as they may be needed at build time
         pkg_uuid = Base.UUID(pkg_uuid),  # Enables platform augmentation for correct variant selection
     )
 

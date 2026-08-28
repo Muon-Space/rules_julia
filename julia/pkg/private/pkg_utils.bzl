@@ -69,10 +69,6 @@ def create_artifact_repos(hub_name, package_name, package_uuid, artifacts):
         git_tree_sha1 = artifact_info.get("git_tree_sha1", "")
         downloads = artifact_info.get("download", [])
 
-        # Skip lazy artifacts
-        if artifact_info.get("lazy", False):
-            continue
-
         if not platform_key or not git_tree_sha1 or not downloads:
             continue
 
