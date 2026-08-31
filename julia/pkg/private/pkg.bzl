@@ -165,7 +165,6 @@ def install(*, module_ctx, attrs, annotations = {}):
         # Get annotations for this package if any
         package_annotations = annotations.get(package_name)
 
-
         # Create artifact repos for JLL packages
         artifact_repos = {}
         if artifacts:

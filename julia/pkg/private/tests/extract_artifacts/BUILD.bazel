@@ -1,7 +1,7 @@
-load("//julia/pkg:julia_pkg_compiler.bzl", "julia_pkg_compiler")
-load("//julia/pkg:julia_pkg_test.bzl", "julia_pkg_test")
 load("//julia:julia_library.bzl", "julia_library")
 load("//julia:julia_test.bzl", "julia_test")
+load("//julia/pkg:julia_pkg_compiler.bzl", "julia_pkg_compiler")
+load("//julia/pkg:julia_pkg_test.bzl", "julia_pkg_test")
 
 julia_pkg_compiler(
     name = "pkg_update",
@@ -30,6 +30,6 @@ julia_test(
     srcs = ["test/runtests.jl"],
     main = "test/runtests.jl",
     deps = [
-        "//julia/pkg/private/tests/extract_artifacts:extract_artifacts",
+        "//julia/pkg/private/tests/extract_artifacts",
     ],
 )
