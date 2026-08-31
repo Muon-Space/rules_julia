@@ -1,0 +1,1344 @@
+{
+  "AxisArrays": {
+    "deps": [
+      "Dates",
+      "IntervalSets",
+      "IterTools",
+      "RangeArrays"
+    ],
+    "integrity": "sha256-PcQngDpNaZQhgIoExccWn9lS8rrPBq5gO92H0dxcUbg=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/39de3d68-74b9-583c-8d2d-e117c070f3a9/4126b08903b777c88edf1754288144a0492c05ad"
+    ],
+    "uuid": "39de3d68-74b9-583c-8d2d-e117c070f3a9",
+    "version": "0.4.8"
+  },
+  "Bzip2_jll": {
+    "artifacts": {
+      "Bzip2": {
+        "download": [
+          {
+            "sha256": "b172414de3958fd16cf61839471529d76b74ac486f2955283a5a063665ff560d",
+            "url": "https://github.com/JuliaBinaryWrappers/Bzip2_jll.jl/releases/download/Bzip2-v1.0.9+0/Bzip2.v1.0.9.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "c1600fa286afe4bf3616780a19b65285c63968ca",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-043SPkkGFYXx3rYjefxMATv3gxRnLwhAMhc3+2sD5PA=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/6e34b625-4abd-537c-b88f-471c36dfa7a0/1b96ea4a01afe0ea4090c5c8039690672dd13f2e"
+    ],
+    "uuid": "6e34b625-4abd-537c-b88f-471c36dfa7a0",
+    "version": "1.0.9+0"
+  },
+  "CEnum": {
+    "deps": [],
+    "integrity": "sha256-57x/g3ApUF0PYhPl8iLtpuhnsQdZvpMekrWx/L8NK4U=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/fa961155-64e5-5f13-b03f-caf6b980ea82/389ad5c84de1ae7cf0e28e381131c98ea87d54fc"
+    ],
+    "uuid": "fa961155-64e5-5f13-b03f-caf6b980ea82",
+    "version": "0.5.0"
+  },
+  "CodecZstd": {
+    "deps": [
+      "TranscodingStreams",
+      "Zstd_jll"
+    ],
+    "integrity": "sha256-wuIcGSbNYXhTclxKqVx5a2WERKUH/cQd2DNkmXT25H0=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/6b39b394-51ab-5f42-8807-6242bab2b4c2/da54a6cd93c54950c15adf1d336cfd7d71f51a56"
+    ],
+    "uuid": "6b39b394-51ab-5f42-8807-6242bab2b4c2",
+    "version": "0.8.7"
+  },
+  "ColorTypes": {
+    "deps": [
+      "FixedPointNumbers",
+      "Random"
+    ],
+    "integrity": "sha256-dWynDtW2DL0C3MfePEHKYLUG9YCoRao9us0jGlhIZTY=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/3da002f7-5984-5a60-b8a6-cbb66c0b333f/67e11ee83a43eb71ddc950302c53bf33f0690dfe"
+    ],
+    "uuid": "3da002f7-5984-5a60-b8a6-cbb66c0b333f",
+    "version": "0.12.1"
+  },
+  "ColorVectorSpace": {
+    "deps": [
+      "ColorTypes",
+      "FixedPointNumbers",
+      "LinearAlgebra",
+      "Requires",
+      "Statistics",
+      "TensorCore"
+    ],
+    "integrity": "sha256-oLI7Slgqtnmzph3BvXcQ5ACxKD1yii91K4bHC5uNyPg=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/c3611d14-8923-5661-9e6a-0046d554d3a4/8b3b6f87ce8f65a2b4f857528fd8d70086cd72b1"
+    ],
+    "uuid": "c3611d14-8923-5661-9e6a-0046d554d3a4",
+    "version": "0.11.0"
+  },
+  "Colors": {
+    "deps": [
+      "ColorTypes",
+      "FixedPointNumbers",
+      "Reexport"
+    ],
+    "integrity": "sha256-jURlC7cP6NYv3lSkXf1wJotbq1uDSLO5QZKa9PuHBJg=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/5ae59095-9a9b-59fe-a467-6f913c188581/37ea44092930b1811e666c3bc38065d7d87fcc74"
+    ],
+    "uuid": "5ae59095-9a9b-59fe-a467-6f913c188581",
+    "version": "0.13.1"
+  },
+  "DataStructures": {
+    "deps": [
+      "OrderedCollections"
+    ],
+    "integrity": "sha256-qNYKgm8AVyyPxbvYKW5jo7WGWiB3R8GmivTPp4Iq2Kw=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/864edb3b-99cc-5e75-8d2d-829cb0a9cfe8/b0bc6d2cad1fed8b7fd59a1551a991cb3d2809e6"
+    ],
+    "uuid": "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8",
+    "version": "0.19.6"
+  },
+  "Distances": {
+    "deps": [
+      "LinearAlgebra",
+      "Statistics",
+      "StatsAPI"
+    ],
+    "integrity": "sha256-BAmbbX/t5kh6vVaxe52a7mXu7gKK/tyxyMsqN/wc/7Q=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/b4f34e82-e78d-54a5-968a-f98e89d6e8f7/c7e3a542b999843086e2f29dac96a618c105be1d"
+    ],
+    "uuid": "b4f34e82-e78d-54a5-968a-f98e89d6e8f7",
+    "version": "0.10.12"
+  },
+  "DocStringExtensions": {
+    "deps": [],
+    "integrity": "sha256-w3DdodWFByy4ymCxh709COFBlYyOE03n6Wu/GbgmUBY=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/ffbed154-4ef7-542d-bbb7-c09d3a79fcae/7442a5dfe1ebb773c29cc2962a8980f47221d76c"
+    ],
+    "uuid": "ffbed154-4ef7-542d-bbb7-c09d3a79fcae",
+    "version": "0.9.5"
+  },
+  "FFTW_jll": {
+    "artifacts": {
+      "FFTW": {
+        "download": [
+          {
+            "sha256": "8da4beb8abe735cb2c9e7ef17f8f000d0ffbeccda1377d4939558dbccdd53655",
+            "url": "https://github.com/JuliaBinaryWrappers/FFTW_jll.jl/releases/download/FFTW-v3.3.12+0/FFTW.v3.3.12.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "57bf2e972613ddabdd4e01ec54c2a8cbadb9e681",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-hZAiIQmKP5IXY2RRfMEAalPJqIeDJjsyLftZcWNyNVI=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/f5851436-0d7a-5f13-b9de-f02708fd171a/6866aec60ef98e3164cd8d6855225684207e9dff"
+    ],
+    "uuid": "f5851436-0d7a-5f13-b9de-f02708fd171a",
+    "version": "3.3.12+0"
+  },
+  "FileIO": {
+    "deps": [
+      "Pkg",
+      "Requires",
+      "UUIDs"
+    ],
+    "integrity": "sha256-9KQ3cPBkn7P+EEDJ5Twl1bhZt88nmebYu7ZZGf0yJ1M=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/5789e2e9-d7fb-5bc7-8068-2c6fae9b9549/6621fef488e496356c9c9625d0562c12a6070819"
+    ],
+    "uuid": "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549",
+    "version": "1.20.0"
+  },
+  "FixedPointNumbers": {
+    "deps": [
+      "Random",
+      "Statistics"
+    ],
+    "integrity": "sha256-etfWT75XBQulxoDyHBm7G0PzV/dpSh59heb9J/bJiO4=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/53c48c17-4a7d-5ca2-90c5-79b7896eea93/59af96b98217c6ef4ae0dfe065ac7c20831d1a84"
+    ],
+    "uuid": "53c48c17-4a7d-5ca2-90c5-79b7896eea93",
+    "version": "0.8.6"
+  },
+  "Ghostscript_jll": {
+    "artifacts": {
+      "Ghostscript": {
+        "download": [
+          {
+            "sha256": "a91b9b17c9b6eb2f1f5e2a3f61f7ef7c6777ad0201f1a14a892bcc8685c9b731",
+            "url": "https://github.com/JuliaBinaryWrappers/Ghostscript_jll.jl/releases/download/Ghostscript-v9.55.1+0/Ghostscript.v9.55.1.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "0c7f8196a88717f9a2200735895a05ab41da65a8",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "JpegTurbo_jll",
+      "Libdl",
+      "Zlib_jll"
+    ],
+    "integrity": "sha256-WyZoVYhB4OyJ9kHUBFbdFjyFq9kNwtAjjYzSyBrYODQ=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/61579ee1-b43e-5ca0-a5da-69d92c66a64b/38044a04637976140074d0b0621c1edf0eb531fd"
+    ],
+    "uuid": "61579ee1-b43e-5ca0-a5da-69d92c66a64b",
+    "version": "9.55.1+0"
+  },
+  "Giflib_jll": {
+    "artifacts": {
+      "Giflib": {
+        "download": [
+          {
+            "sha256": "d5d1ce822c5502c44079eb8d85b525d0a42fb7c6d7a71abb92ed5f495423fc25",
+            "url": "https://github.com/JuliaBinaryWrappers/Giflib_jll.jl/releases/download/Giflib-v5.2.3+0/Giflib.v5.2.3.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "9c167849d9bb06437fac65a8043f514fedeffe79",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-MPge+JuafhnMnRcHoBypj4Oh/n5eKUthK2flm2R33qM=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/59f7168a-df46-5410-90c8-f2779963d0ec/6570366d757b50fabae9f4315ad74d2e40c0560a"
+    ],
+    "uuid": "59f7168a-df46-5410-90c8-f2779963d0ec",
+    "version": "5.2.3+0"
+  },
+  "ImageAxes": {
+    "deps": [
+      "AxisArrays",
+      "ImageBase",
+      "ImageCore",
+      "Reexport",
+      "SimpleTraits"
+    ],
+    "integrity": "sha256-FLMfYu+K8uZgMVqAjoOZtttOQcJfWc4rYZgUAkXKdkk=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/2803e5a7-5153-5ecf-9a86-9b4c37f5f5ac/e12629406c6c4442539436581041d372d69c55ba"
+    ],
+    "uuid": "2803e5a7-5153-5ecf-9a86-9b4c37f5f5ac",
+    "version": "0.6.12"
+  },
+  "ImageBase": {
+    "deps": [
+      "ImageCore",
+      "Reexport"
+    ],
+    "integrity": "sha256-wQnaF9x51myGZk2AFKdtA4jBJ7YnKiSCZDUIHtveKUc=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/c817782e-172a-44cc-b673-b171935fbb9e/eb49b82c172811fd2c86759fa0553a2221feb909"
+    ],
+    "uuid": "c817782e-172a-44cc-b673-b171935fbb9e",
+    "version": "0.1.7"
+  },
+  "ImageCore": {
+    "deps": [
+      "ColorVectorSpace",
+      "Colors",
+      "FixedPointNumbers",
+      "MappedArrays",
+      "MosaicViews",
+      "OffsetArrays",
+      "PaddedViews",
+      "PrecompileTools",
+      "Reexport"
+    ],
+    "integrity": "sha256-4Rs/bOaARbKuQhE2Wx6hsuHcpz25LZEiLf8GP7I9Tug=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/a09fc81d-aa75-5fe9-8630-4744c3626534/8c193230235bbcee22c8066b0374f63b5683c2d3"
+    ],
+    "uuid": "a09fc81d-aa75-5fe9-8630-4744c3626534",
+    "version": "0.10.5"
+  },
+  "ImageIO": {
+    "deps": [
+      "FileIO",
+      "IndirectArrays",
+      "JpegTurbo",
+      "LazyModules",
+      "Netpbm",
+      "OpenEXR",
+      "PNGFiles",
+      "QOI",
+      "Sixel",
+      "TiffImages",
+      "UUIDs",
+      "WebP"
+    ],
+    "integrity": "sha256-ZtzHttJsUMhrZqLZF3+HLv2EiRp4Y3ah/4FZJOB3jL0=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/82e4d734-157c-48bb-816b-45c225c6df19/696144904b76e1ca433b886b4e7edd067d76cbf7"
+    ],
+    "uuid": "82e4d734-157c-48bb-816b-45c225c6df19",
+    "version": "0.6.9"
+  },
+  "ImageMagick": {
+    "deps": [
+      "FileIO",
+      "ImageCore",
+      "ImageMagick_jll",
+      "InteractiveUtils"
+    ],
+    "integrity": "sha256-BLWiKoLPiu4V7U/fjG4n6c72zGKR+q/wOelx6UUnnak=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/6218d12a-5da1-5696-b52f-db25d2ecc6d1/8e64ab2f0da7b928c8ae889c514a52741debc1c2"
+    ],
+    "uuid": "6218d12a-5da1-5696-b52f-db25d2ecc6d1",
+    "version": "1.4.2"
+  },
+  "ImageMagick_jll": {
+    "artifacts": {
+      "ImageMagick": {
+        "download": [
+          {
+            "sha256": "4897fff8819732cc46c4610d6e83e1f556483e831e8fcf6c5c27184949e3c049",
+            "url": "https://github.com/JuliaBinaryWrappers/ImageMagick_jll.jl/releases/download/ImageMagick-v7.1.2029+0/ImageMagick.v7.1.2029.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "58c7bda01f71493abe6d00d1e7a9539d4f8942f5",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "Bzip2_jll",
+      "FFTW_jll",
+      "Ghostscript_jll",
+      "JLLWrappers",
+      "JpegTurbo_jll",
+      "Libdl",
+      "Libtiff_jll",
+      "OpenJpeg_jll",
+      "Zlib_jll",
+      "Zstd_jll",
+      "libpng_jll",
+      "libwebp_jll",
+      "libzip_jll"
+    ],
+    "integrity": "sha256-xxAY475hGcXNSxhziIuZktjU4br1fq7OvRuhpVF27vM=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/c73af94c-d91f-53ed-93a7-00f77d67a9d7/1bb9ff98fead7d25c16d773b02ae13895e8abe74"
+    ],
+    "uuid": "c73af94c-d91f-53ed-93a7-00f77d67a9d7",
+    "version": "7.1.2029+0"
+  },
+  "ImageMetadata": {
+    "deps": [
+      "AxisArrays",
+      "ImageAxes",
+      "ImageBase",
+      "ImageCore"
+    ],
+    "integrity": "sha256-3GIIlyRVzujxe0zofKZ7A6Yd3MokWbXZAjIcSV3BxBo=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/bc367c6b-8a6b-528e-b4bd-a4b897500b49/2a81c3897be6fbcde0802a0ebe6796d0562f63ec"
+    ],
+    "uuid": "bc367c6b-8a6b-528e-b4bd-a4b897500b49",
+    "version": "0.9.10"
+  },
+  "Imath_jll": {
+    "artifacts": {
+      "Imath": {
+        "download": [
+          {
+            "sha256": "6a4e7fe53e48ae1a5db28ef0cebf30fb7482f8a757a88d3f57545fba08bedb55",
+            "url": "https://github.com/JuliaBinaryWrappers/Imath_jll.jl/releases/download/Imath-v3.2.2+0/Imath.v3.2.2.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "2cbecda271d0e218ffc6a31810152d29fc8fe9ff",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-vYMC2V+w5yy0nXLLsjVHNPh+E1xuwOeawubvM1qDhEY=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/905a6f67-0a94-5f89-b386-d35d92009cd1/dcc8d0cd653e55213df9b75ebc6fe4a8d3254c65"
+    ],
+    "uuid": "905a6f67-0a94-5f89-b386-d35d92009cd1",
+    "version": "3.2.2+0"
+  },
+  "IndirectArrays": {
+    "deps": [],
+    "integrity": "sha256-w0pPQPa2zMgfG8fx0zu8lb8ZNZOKh/HD4W2gT2w9Yd4=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/9b13fd28-a010-5f03-acff-a1bbcff69959/012e604e1c7458645cb8b436f8fba789a51b257f"
+    ],
+    "uuid": "9b13fd28-a010-5f03-acff-a1bbcff69959",
+    "version": "1.0.0"
+  },
+  "Inflate": {
+    "deps": [],
+    "integrity": "sha256-QS8jA4f7BxwgjmT+Q2V/rx7rKmhtY4gq0yyzhB8t5QE=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/d25df0c9-e2be-5dd7-82c8-3ad0b3e990b9/d1b1b796e47d94588b3757fe84fbf65a5ec4a80d"
+    ],
+    "uuid": "d25df0c9-e2be-5dd7-82c8-3ad0b3e990b9",
+    "version": "0.1.5"
+  },
+  "IntervalSets": {
+    "deps": [],
+    "integrity": "sha256-AygxEasCBiXADdz0GyZKFunRwqqiFuByJurURfgVjII=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/8197267c-284f-5f27-9208-e0e47529a953/79d6bd28c8d9bccc2229784f1bd637689b256377"
+    ],
+    "uuid": "8197267c-284f-5f27-9208-e0e47529a953",
+    "version": "0.7.14"
+  },
+  "IterTools": {
+    "deps": [],
+    "integrity": "sha256-YvgORnfTi27sNmlN1oesNKYcZz/FVZP6DVger81rSbE=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/c8e1da08-722c-5040-9ed9-7db0dc04731e/42d5f897009e7ff2cf88db414a389e5ed1bdd023"
+    ],
+    "uuid": "c8e1da08-722c-5040-9ed9-7db0dc04731e",
+    "version": "1.10.0"
+  },
+  "JLLWrappers": {
+    "deps": [
+      "Artifacts",
+      "Preferences"
+    ],
+    "integrity": "sha256-0q+c252bZMLBvpYBKqw0zcnh241l5SMx6z0KYFEGF84=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/692b3bcd-3c85-4b1f-b108-f13ce0eb3210/7204148362dafe5fe6a273f855b8ccbe4df8173e"
+    ],
+    "uuid": "692b3bcd-3c85-4b1f-b108-f13ce0eb3210",
+    "version": "1.8.0"
+  },
+  "JpegTurbo": {
+    "deps": [
+      "CEnum",
+      "FileIO",
+      "ImageCore",
+      "JpegTurbo_jll",
+      "TOML"
+    ],
+    "integrity": "sha256-s15FaPBwcRTRjkPkgSydyEc4WMPB5InoGZTOo3+KQoQ=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/b835a17e-a41a-41e7-81f0-2f016b05efe0/9496de8fb52c224a2e3f9ff403947674517317d9"
+    ],
+    "uuid": "b835a17e-a41a-41e7-81f0-2f016b05efe0",
+    "version": "0.1.6"
+  },
+  "JpegTurbo_jll": {
+    "artifacts": {
+      "JpegTurbo": {
+        "download": [
+          {
+            "sha256": "46059027733b0d61a121953b79057f10a22e205e4f2d821ca35d05c8d8b61918",
+            "url": "https://github.com/JuliaBinaryWrappers/JpegTurbo_jll.jl/releases/download/JpegTurbo-v3.2.0+1/JpegTurbo.v3.2.0.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "7b7d2b32af731cfcc1bbbffb753b9f4ad22dbd88",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-ViTJ5C4IlDbScxm9XtBa+pIxaJGS5JxCckAaZNxEtDo=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/aacddb02-875f-59d6-b918-886e6ef4fbf8/037babc10853eeb8e585418922246cb97b8e5b74"
+    ],
+    "uuid": "aacddb02-875f-59d6-b918-886e6ef4fbf8",
+    "version": "3.2.0+1"
+  },
+  "LERC_jll": {
+    "artifacts": {
+      "LERC": {
+        "download": [
+          {
+            "sha256": "666183df3ee6f3e54300146d33384cf4e7165a19ac2933939cb764a1b7f2fcf6",
+            "url": "https://github.com/JuliaBinaryWrappers/LERC_jll.jl/releases/download/LERC-v4.1.0+0/LERC.v4.1.0.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "fc8f1a78a42dbc427cd01ecfb29bb0b4a2489a6a",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-7v2aOkIJ1nVv9QPcqPcbl/6NJ8nWsbGaPoEbuSY1pp0=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/88015f11-f218-50d7-93a8-a6af411a945d/17b94ecafcfa45e8360a4fc9ca6b583b049e4e37"
+    ],
+    "uuid": "88015f11-f218-50d7-93a8-a6af411a945d",
+    "version": "4.1.0+0"
+  },
+  "LazyModules": {
+    "deps": [],
+    "integrity": "sha256-4cmIZuXLIzBBga+QZo99SN1OH5+m2PVM2QZw0ftpBJk=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/8cdb02fc-e678-4876-92c5-9defec4f444e/a560dd966b386ac9ae60bdd3a3d3a326062d3c3e"
+    ],
+    "uuid": "8cdb02fc-e678-4876-92c5-9defec4f444e",
+    "version": "0.3.1"
+  },
+  "Libglvnd_jll": {
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl",
+      "Xorg_libX11_jll",
+      "Xorg_libXext_jll"
+    ],
+    "integrity": "sha256-0h0JSfSNHbh/eOr14aezTD4+M1e0ESJ220S9jQdfYs4=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/7e76a0d4-f3c7-5321-8279-8d96eeed0f29/d36c21b9e7c172a44a10484125024495e2625ac0"
+    ],
+    "uuid": "7e76a0d4-f3c7-5321-8279-8d96eeed0f29",
+    "version": "1.7.1+1"
+  },
+  "Libtiff_jll": {
+    "artifacts": {
+      "Libtiff": {
+        "download": [
+          {
+            "sha256": "26fa511b4ef52d053e61044005a58232a68fe71f7af2899ca5d23f326658080e",
+            "url": "https://github.com/JuliaBinaryWrappers/Libtiff_jll.jl/releases/download/Libtiff-v4.7.3+0/Libtiff.v4.7.3.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "3d2f81d56d625350ab51e51734a5c247bdea83ad",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "JpegTurbo_jll",
+      "LERC_jll",
+      "Libdl",
+      "XZ_jll",
+      "Zlib_jll",
+      "Zstd_jll"
+    ],
+    "integrity": "sha256-lF2IgBMiVmqQNPJiAQYEULFhdoQORIlLs8q7teCML1c=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/89763e89-9b03-5906-acba-b20f662cd828/aebd334d06cee9f24cea70bd19a39749daf73881"
+    ],
+    "uuid": "89763e89-9b03-5906-acba-b20f662cd828",
+    "version": "4.7.3+0"
+  },
+  "LittleCMS_jll": {
+    "artifacts": {
+      "LittleCMS": {
+        "download": [
+          {
+            "sha256": "ee30ceacc51e8fac605e66ddeaa83a3c7a650641c8789d6c53fdd28ae59e7649",
+            "url": "https://github.com/JuliaBinaryWrappers/LittleCMS_jll.jl/releases/download/LittleCMS-v2.19.1+0/LittleCMS.v2.19.1.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "3d0405e47df4b51646e238ed366989e6ee57cf94",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "JpegTurbo_jll",
+      "Libdl",
+      "Libtiff_jll"
+    ],
+    "integrity": "sha256-yIgESh6PMM6V9u0KWXL67JrgYuNS7B0LoWgcmhQaOxs=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/d3a379c0-f9a3-5b72-a4c0-6bf4d2e8af0f/38928f7999753af13d4e13966ae15958ff3a917a"
+    ],
+    "uuid": "d3a379c0-f9a3-5b72-a4c0-6bf4d2e8af0f",
+    "version": "2.19.1+0"
+  },
+  "MacroTools": {
+    "deps": [],
+    "integrity": "sha256-PP3xRpCoGsdZMzaa0QYcpAV9o5dgC2PynlFKHO9MT94=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/1914dd2f-81c6-5fcd-8719-6d5c9610ff09/1e0228a030642014fe5cfe68c2c0a818f9e3f522"
+    ],
+    "uuid": "1914dd2f-81c6-5fcd-8719-6d5c9610ff09",
+    "version": "0.5.16"
+  },
+  "MappedArrays": {
+    "deps": [],
+    "integrity": "sha256-5B/UFeUEUX16hr+bADr+fPSwWhqQKuwZMNl6pcgwTeI=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/dbb5928d-eab1-5f90-85c2-b9b0edb7c900/0ee4497a4e80dbd29c058fcee6493f5219556f40"
+    ],
+    "uuid": "dbb5928d-eab1-5f90-85c2-b9b0edb7c900",
+    "version": "0.4.3"
+  },
+  "MosaicViews": {
+    "deps": [
+      "MappedArrays",
+      "OffsetArrays",
+      "PaddedViews",
+      "StackViews"
+    ],
+    "integrity": "sha256-lzABDiccD5ik1xGsv9B9cQiNHAeCxhMQrH0cNmMqffQ=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/e94cdb99-869f-56ef-bcf0-1ae2bcbe0389/7b86a5d4d70a9f5cdf2dacb3cbe6d251d1a61dbe"
+    ],
+    "uuid": "e94cdb99-869f-56ef-bcf0-1ae2bcbe0389",
+    "version": "0.3.4"
+  },
+  "Netpbm": {
+    "deps": [
+      "FileIO",
+      "ImageCore",
+      "ImageMetadata"
+    ],
+    "integrity": "sha256-xbhKp/J+M9cGktOvqqIiVad0fbqqcGp1VMUVS5vicQY=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/f09324ee-3d7c-5217-9330-fc30815ba969/d92b107dbb887293622df7697a2223f9f8176fcd"
+    ],
+    "uuid": "f09324ee-3d7c-5217-9330-fc30815ba969",
+    "version": "1.1.1"
+  },
+  "OffsetArrays": {
+    "deps": [],
+    "integrity": "sha256-rtxX9taqzf5o2jLzBGIvQQ59c6G61Ke3M+tWWWsr3k4=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/6fe1bfb0-de20-5000-8ca7-80f57d26f881/117432e406b5c023f665fa73dc26e79ec3630151"
+    ],
+    "uuid": "6fe1bfb0-de20-5000-8ca7-80f57d26f881",
+    "version": "1.17.0"
+  },
+  "OpenEXR": {
+    "deps": [
+      "Colors",
+      "FileIO",
+      "OpenEXR_jll"
+    ],
+    "integrity": "sha256-V63nHpxj8m8Bf2vIpHoHFTS+1V5Q3m5xD47zNfmLS4E=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/52e1d378-f018-4a11-a4be-720524705ac7/97db9e07fe2091882c765380ef58ec553074e9c7"
+    ],
+    "uuid": "52e1d378-f018-4a11-a4be-720524705ac7",
+    "version": "0.3.3"
+  },
+  "OpenEXR_jll": {
+    "artifacts": {
+      "OpenEXR": {
+        "download": [
+          {
+            "sha256": "f410f0b8f08b3abc7be0da92c3ba05473302acf50cd48db4bd78b658b8aac9cc",
+            "url": "https://github.com/JuliaBinaryWrappers/OpenEXR_jll.jl/releases/download/OpenEXR-v3.4.14+0/OpenEXR.v3.4.14.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "6c719f921a9f107cca8eb614c4cec6e6a2cc93e7",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "Imath_jll",
+      "JLLWrappers",
+      "Libdl",
+      "Zlib_jll"
+    ],
+    "integrity": "sha256-+5r127UY80I68/m/9nta10bseV7UjNfv/aCrzpueh0g=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/18a262bb-aa17-5467-a713-aee519bc75cb/fd09db52a90efaae33a3d91f0bc71a22c429e8f1"
+    ],
+    "uuid": "18a262bb-aa17-5467-a713-aee519bc75cb",
+    "version": "3.4.14+0"
+  },
+  "OpenJpeg_jll": {
+    "artifacts": {
+      "OpenJpeg": {
+        "download": [
+          {
+            "sha256": "af6884729c163e75ab6d2e34c7daeaec72ad8fbe52c13bacbd80ad8c2052479f",
+            "url": "https://github.com/JuliaBinaryWrappers/OpenJpeg_jll.jl/releases/download/OpenJpeg-v2.5.5+0/OpenJpeg.v2.5.5.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "cba42c2e72b214c5a4beab5c23d1d0b85178bc85",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl",
+      "Libtiff_jll",
+      "LittleCMS_jll",
+      "libpng_jll"
+    ],
+    "integrity": "sha256-/sAld1EUDZDAxR5Pcm1NiqGEHHMQYekST/4PhtlAacQ=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/643b3616-a352-519d-856d-80112ee9badc/215a6666fee6d6b3a6e75f2cc22cb767e2dd393a"
+    ],
+    "uuid": "643b3616-a352-519d-856d-80112ee9badc",
+    "version": "2.5.5+0"
+  },
+  "OrderedCollections": {
+    "deps": [],
+    "integrity": "sha256-OsJ6EhE/6UkfOpS1iN4T4J/b7XvX9nmaphkIAn02Ong=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/bac558e1-5e72-5ebc-8fee-abe8a469f55d/05f45c2e0de6259db764adbfd2f1dc6d3f8de13c"
+    ],
+    "uuid": "bac558e1-5e72-5ebc-8fee-abe8a469f55d",
+    "version": "2.0.1"
+  },
+  "PNGFiles": {
+    "deps": [
+      "Base64",
+      "CEnum",
+      "ImageCore",
+      "IndirectArrays",
+      "OffsetArrays",
+      "libpng_jll"
+    ],
+    "integrity": "sha256-OQnWQFT3gr7Sy4bwV4uf1qHxqgfwt2cJUV8KoRbRXmU=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/f57f5aa1-a3ce-4bc8-8ab9-96f992907883/32b657a0d57c310a1a172bfc8c8cf68c5e674323"
+    ],
+    "uuid": "f57f5aa1-a3ce-4bc8-8ab9-96f992907883",
+    "version": "0.4.5"
+  },
+  "PaddedViews": {
+    "deps": [
+      "OffsetArrays"
+    ],
+    "integrity": "sha256-tikUhcjLnxq7lKP40UjcnqtoXDp9SoUX0msOmUVA2sU=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/5432bcbf-9aad-5242-b902-cca2824c8663/0fac6313486baae819364c52b4f483450a9d793f"
+    ],
+    "uuid": "5432bcbf-9aad-5242-b902-cca2824c8663",
+    "version": "0.5.12"
+  },
+  "PkgVersion": {
+    "deps": [
+      "Pkg"
+    ],
+    "integrity": "sha256-nFzgO1sQSlFQvQw4681dnUQ3lqkV35PY+mlN/CBJw1I=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/eebad327-c553-4316-9ea0-9fa01ccd7688/f9501cc0430a26bc3d156ae1b5b0c1b47af4d6da"
+    ],
+    "uuid": "eebad327-c553-4316-9ea0-9fa01ccd7688",
+    "version": "0.3.3"
+  },
+  "PrecompileTools": {
+    "deps": [
+      "Preferences"
+    ],
+    "integrity": "sha256-FIKYN0TdWCLkI1geEUNt7fiVGWdVSnvmN4rz6XmGIlQ=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/aea7be01-6a6a-4083-8856-8a6e6704d82a/edbeefc7a4889f528644251bdb5fc9ab5348bc2c"
+    ],
+    "uuid": "aea7be01-6a6a-4083-8856-8a6e6704d82a",
+    "version": "1.3.4"
+  },
+  "Preferences": {
+    "deps": [
+      "TOML"
+    ],
+    "integrity": "sha256-NHzSSDMqUmP+CJo5YO9GCg9EWAMi2Hz5yRdEPggztlg=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/21216c6a-2e73-6563-6e65-726566657250/8b770b60760d4451834fe79dd483e318eee709c4"
+    ],
+    "uuid": "21216c6a-2e73-6563-6e65-726566657250",
+    "version": "1.5.2"
+  },
+  "ProgressMeter": {
+    "deps": [
+      "Distributed",
+      "Printf"
+    ],
+    "integrity": "sha256-ZPyMZbWq6N6YGj5Nck6dPohyPR9BQ6/5JqbB9PErsXQ=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/92933f4c-e287-5a05-a399-4b506db050ca/fbb92c6c56b34e1a2c4c36058f68f332bec840e7"
+    ],
+    "uuid": "92933f4c-e287-5a05-a399-4b506db050ca",
+    "version": "1.11.0"
+  },
+  "QOI": {
+    "deps": [
+      "ColorTypes",
+      "FileIO",
+      "FixedPointNumbers"
+    ],
+    "integrity": "sha256-bTTRcXXmfreea6OksBc91fRQUWFU+Mwvv88h6lcYOfo=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/4b34888f-f399-49d4-9bb3-47ed5cae4e65/472daaa816895cb7aee81658d4e7aec901fa1106"
+    ],
+    "uuid": "4b34888f-f399-49d4-9bb3-47ed5cae4e65",
+    "version": "1.0.2"
+  },
+  "RangeArrays": {
+    "deps": [],
+    "integrity": "sha256-t3QgpoHuOi9gKc1EB2KJX6qqAAOrwnValAte+8dGWkc=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/b3c3ace0-ae52-54e7-9d0b-2c1406fd6b9d/b9039e93773ddcfc828f12aadf7115b4b4d225f5"
+    ],
+    "uuid": "b3c3ace0-ae52-54e7-9d0b-2c1406fd6b9d",
+    "version": "0.3.2"
+  },
+  "Reexport": {
+    "deps": [],
+    "integrity": "sha256-nToCrvTEuoZNaR4asBeUI+rInnAHAxGHx5MoRB4qs/4=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/189a3867-3050-52da-a836-e630ba90ab69/45e428421666073eab6f2da5c9d310d99bb12f9b"
+    ],
+    "uuid": "189a3867-3050-52da-a836-e630ba90ab69",
+    "version": "1.2.2"
+  },
+  "Requires": {
+    "deps": [
+      "UUIDs"
+    ],
+    "integrity": "sha256-kjSaqWIBu1sViyP82wUwKzhCJcfJqQgClSekC2ShV5E=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/ae029012-a4dd-5104-9daa-d747884805df/62389eeff14780bfe55195b7204c0d8738436d64"
+    ],
+    "uuid": "ae029012-a4dd-5104-9daa-d747884805df",
+    "version": "1.3.1"
+  },
+  "SIMD": {
+    "deps": [
+      "PrecompileTools"
+    ],
+    "integrity": "sha256-86R4dsxqfjVNiFrT9lvxndnXIigTRO1WuO4iRE59gpw=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/fdea26ae-647d-5447-a871-4b548cad5224/e24dc23107d426a096d3eae6c165b921e74c18e4"
+    ],
+    "uuid": "fdea26ae-647d-5447-a871-4b548cad5224",
+    "version": "3.7.2"
+  },
+  "SimpleTraits": {
+    "deps": [
+      "InteractiveUtils",
+      "MacroTools"
+    ],
+    "integrity": "sha256-DYqitnoXOp5A/vrqdoBrg68JqvbhYu42R8AGFZWUlwY=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/699a6c99-e7fa-54fc-8d76-47d257e15c1d/7ddb0b49c109481b046972c0e4ab02b2127d6a75"
+    ],
+    "uuid": "699a6c99-e7fa-54fc-8d76-47d257e15c1d",
+    "version": "0.9.6"
+  },
+  "Sixel": {
+    "deps": [
+      "Dates",
+      "FileIO",
+      "ImageCore",
+      "IndirectArrays",
+      "OffsetArrays",
+      "REPL",
+      "libsixel_jll"
+    ],
+    "integrity": "sha256-xIMuFNtkKG2Oq5XFOLJTUqS6ZuFV19QDDYvYRzoUp6E=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/45858cf5-a6b0-47a3-bbea-62219f50df47/0494aed9501e7fb65daba895fb7fd57cc38bc743"
+    ],
+    "uuid": "45858cf5-a6b0-47a3-bbea-62219f50df47",
+    "version": "0.1.5"
+  },
+  "StackViews": {
+    "deps": [
+      "OffsetArrays"
+    ],
+    "integrity": "sha256-G06CZ6BeMv2VWT9LAYIPam/urTgQT5Kl3KRfYqGStXk=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/cae243ae-269e-4f55-b966-ac2d0dc13c15/be1cf4eb0ac528d96f5115b4ed80c26a8d8ae621"
+    ],
+    "uuid": "cae243ae-269e-4f55-b966-ac2d0dc13c15",
+    "version": "0.1.2"
+  },
+  "Statistics": {
+    "deps": [
+      "LinearAlgebra"
+    ],
+    "integrity": "sha256-gZGyEewizNZsa5atp+cNDOHiu1B/XTQUOH5bTmfqVW4=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/10745b16-79ce-11e8-11f9-7d13ad32a3b2/ae3bb1eb3bba077cd276bc5cfc337cc65c3075c0"
+    ],
+    "uuid": "10745b16-79ce-11e8-11f9-7d13ad32a3b2",
+    "version": "1.11.1"
+  },
+  "StatsAPI": {
+    "deps": [
+      "LinearAlgebra"
+    ],
+    "integrity": "sha256-fyirlFLFo/tNOwSxSLV4GCi3HQsWuyLI6kvSOrrhstw=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/82ae8749-77ed-4fe6-ae5f-f523153014b0/178ed29fd5b2a2cfc3bd31c13375ae925623ff36"
+    ],
+    "uuid": "82ae8749-77ed-4fe6-ae5f-f523153014b0",
+    "version": "1.8.0"
+  },
+  "StringDistances": {
+    "deps": [
+      "Distances",
+      "StatsAPI"
+    ],
+    "integrity": "sha256-nEy3E45H97KDP7hhyRjn+bqF1gZTLUlRSnTaAv7UKP0=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/88034a9c-02f8-509d-84a9-84ec65e18404/5b2ca70b099f91e54d98064d5caf5cc9b541ad06"
+    ],
+    "uuid": "88034a9c-02f8-509d-84a9-84ec65e18404",
+    "version": "0.11.3"
+  },
+  "TensorCore": {
+    "deps": [
+      "LinearAlgebra"
+    ],
+    "integrity": "sha256-C3ByZEUEq3UErX986gGrEwBIyFZGoILvK3qSQCj8wso=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/62fd8b95-f654-4bbd-a8a5-9c27f68ccd50/1feb45f88d133a655e001435632f019a9a1bcdb6"
+    ],
+    "uuid": "62fd8b95-f654-4bbd-a8a5-9c27f68ccd50",
+    "version": "0.1.1"
+  },
+  "TestImages": {
+    "artifacts": {
+      "images": {
+        "download": [
+          {
+            "sha256": "da4d8d37304c995e35b43a10572fb8ca88629a47d1d1cd28d2dfa91767374d49",
+            "url": "https://github.com/JuliaImages/TestImages.jl/releases/download/v1.8.0-artifacts/images.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "0fca6f56665d8dfa11bad924ab67e24e6fdbc0d7",
+        "platform_key": "aarch64-apple-darwin"
+      },
+      "images_dip3e": {
+        "download": [
+          {
+            "sha256": "1449c5a5b5a4fb30889493ec057fffcb0170ec855a2d01e1a77fdc265db91db1",
+            "url": "https://github.com/JuliaImages/TestImages.jl/releases/download/v1.7.0-artifacts/images_dip3e.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "9006b49888eceebbde587484f1e5573956f8448b",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "AxisArrays",
+      "ColorTypes",
+      "FileIO",
+      "ImageIO",
+      "ImageMagick",
+      "OffsetArrays",
+      "Pkg",
+      "StringDistances"
+    ],
+    "integrity": "sha256-/KA4FfwOJxJZZ+LRPMmL6Zh/chWCE6/DrXwrNLJT/qM=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/5e47fb64-e119-507b-a336-dd2b206d9990/fc32a2c7972e2829f34cf7ef10bbcb11c9b0a54c"
+    ],
+    "uuid": "5e47fb64-e119-507b-a336-dd2b206d9990",
+    "version": "1.9.0"
+  },
+  "TiffImages": {
+    "deps": [
+      "CodecZstd",
+      "ColorTypes",
+      "DataStructures",
+      "DocStringExtensions",
+      "FileIO",
+      "FixedPointNumbers",
+      "IndirectArrays",
+      "Inflate",
+      "Mmap",
+      "OffsetArrays",
+      "PkgVersion",
+      "PrecompileTools",
+      "ProgressMeter",
+      "SIMD",
+      "UUIDs"
+    ],
+    "integrity": "sha256-b/FsGGbEQ8pTKOBkACxoNsjLhGiLsp4+9Wi0LBvZpIQ=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/731e570b-9d59-4bfa-96dc-6df516fadf69/9ca5f1f2d42f80df4b8c9f6ab5a64f438bbd9976"
+    ],
+    "uuid": "731e570b-9d59-4bfa-96dc-6df516fadf69",
+    "version": "0.11.9"
+  },
+  "TranscodingStreams": {
+    "deps": [],
+    "integrity": "sha256-kr1jtHt5CU9oJw0EyMg0p7pn7kveKRvbjw2j4448r80=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/3bb67fe8-82b1-5028-8e26-92a6c54297fa/0c45878dcfdcfa8480052b6ab162cdd138781742"
+    ],
+    "uuid": "3bb67fe8-82b1-5028-8e26-92a6c54297fa",
+    "version": "0.11.3"
+  },
+  "WebP": {
+    "deps": [
+      "CEnum",
+      "ColorTypes",
+      "FileIO",
+      "FixedPointNumbers",
+      "ImageCore",
+      "libwebp_jll"
+    ],
+    "integrity": "sha256-QFvdzr7kygi1Mxw/g27nUL9ge4YWnsi06sfyIxhQnWQ=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/e3aaa7dc-3e4b-44e0-be63-ffb868ccd7c1/aa1ca3c47f119fbdae8770c29820e5e6119b83f2"
+    ],
+    "uuid": "e3aaa7dc-3e4b-44e0-be63-ffb868ccd7c1",
+    "version": "0.1.3"
+  },
+  "XZ_jll": {
+    "artifacts": {
+      "XZ": {
+        "download": [
+          {
+            "sha256": "850a05ce435218e0978715f75cfdc7b15099ebfad13fe7886bafd6a2e5a99b95",
+            "url": "https://github.com/JuliaBinaryWrappers/XZ_jll.jl/releases/download/XZ-v5.8.3+0/XZ.v5.8.3.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "ba54e98fae08bfb7d692feed7bf6afea95a037e0",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-9yA7u/bcccSZmfz8YMHovmD7gM8MgpySeEvngkCmcp4=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/ffd25f8a-64ca-5728-b0f7-c24cf3aae800/b29c22e245d092b8b4e8d3c09ad7baa586d9f573"
+    ],
+    "uuid": "ffd25f8a-64ca-5728-b0f7-c24cf3aae800",
+    "version": "5.8.3+0"
+  },
+  "Xorg_libX11_jll": {
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl",
+      "Xorg_libxcb_jll",
+      "Xorg_xtrans_jll"
+    ],
+    "integrity": "sha256-3VX3PD1oLnUz4c6OKIj1L9B2+inCe1v0CFZcfcUcDUM=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/4f6342f7-b3d2-589e-9d20-edeb45f2b2bc/808090ede1d41644447dd5cbafced4731c56bd2f"
+    ],
+    "uuid": "4f6342f7-b3d2-589e-9d20-edeb45f2b2bc",
+    "version": "1.8.13+0"
+  },
+  "Xorg_libXau_jll": {
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-T+hEVsBaUURIsyec66rOvio+ROVFmWNjblR/8IB8eIw=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/0c0b7dd1-d40b-584c-a123-a41640f87eec/aa1261ebbac3ccc8d16558ae6799524c450ed16b"
+    ],
+    "uuid": "0c0b7dd1-d40b-584c-a123-a41640f87eec",
+    "version": "1.0.13+0"
+  },
+  "Xorg_libXdmcp_jll": {
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-GQRJuVphoMtmCRQZxSa1DjMlM01zeWPvbOJVDL6rU5o=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/a3789734-cfe1-5b06-b2d0-1dd0d9d62d05/52858d64353db33a56e13c341d7bf44cd0d7b309"
+    ],
+    "uuid": "a3789734-cfe1-5b06-b2d0-1dd0d9d62d05",
+    "version": "1.1.6+0"
+  },
+  "Xorg_libXext_jll": {
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl",
+      "Xorg_libX11_jll"
+    ],
+    "integrity": "sha256-L4z5QDMhv8hLgbd+QuPqYP2sO0aL84jl5Pi5BaYjUXM=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/1082639a-0dae-5f34-9b06-72781eeb8cb3/1a4a26870bf1e5d26cd585e38038d399d7e65706"
+    ],
+    "uuid": "1082639a-0dae-5f34-9b06-72781eeb8cb3",
+    "version": "1.3.8+0"
+  },
+  "Xorg_libxcb_jll": {
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl",
+      "Xorg_libXau_jll",
+      "Xorg_libXdmcp_jll"
+    ],
+    "integrity": "sha256-+7jRJ0wVkgepwmNLxujBOrNQNy5zsghzXuA7F5rN1MY=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/c7cfdc94-dc32-55de-ac96-5a1b8d977c5b/bfcaf7ec088eaba362093393fe11aa141fa15422"
+    ],
+    "uuid": "c7cfdc94-dc32-55de-ac96-5a1b8d977c5b",
+    "version": "1.17.1+0"
+  },
+  "Xorg_xtrans_jll": {
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-FhgZsC4EeOqxWv6dn2Ya54fdWMYc39bOhil8Ld4BbU4=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/c5fb5394-a638-5e4d-96e5-b29de1b5cf10/a63799ff68005991f9d9491b6e95bd3478d783cb"
+    ],
+    "uuid": "c5fb5394-a638-5e4d-96e5-b29de1b5cf10",
+    "version": "1.6.0+0"
+  },
+  "Zstd_jll": {
+    "artifacts": {
+      "Zstd": {
+        "download": [
+          {
+            "sha256": "485bae663917acbe119116dea01adbc690588dc5b175d42771c16e16e5b7e494",
+            "url": "https://github.com/JuliaBinaryWrappers/Zstd_jll.jl/releases/download/Zstd-v1.5.7+1/Zstd.v1.5.7.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "8da603395acfbdbef8c5de3b7223aeb9276ecbdb",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl"
+    ],
+    "integrity": "sha256-T70FuOvdesUJVIr9Rc81/okIVCeFdR52E5waN4P1H8E=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/3161d3a3-bdf6-5164-811a-617609db77b4/446b23e73536f84e8037f5dce465e92275f6a308"
+    ],
+    "uuid": "3161d3a3-bdf6-5164-811a-617609db77b4",
+    "version": "1.5.7+1"
+  },
+  "libpng_jll": {
+    "artifacts": {
+      "libpng": {
+        "download": [
+          {
+            "sha256": "c549ec0badc26385cf03015ded5598fb6d78afca7ad635f972aba6077040c6b6",
+            "url": "https://github.com/JuliaBinaryWrappers/libpng_jll.jl/releases/download/libpng-v1.6.58+0/libpng.v1.6.58.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "e5bcf65328c3b1b858165db7509a39ae315b4f51",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "Libdl",
+      "Zlib_jll"
+    ],
+    "integrity": "sha256-SEJ2gBB5O7hjfaWN5ymbNfHS/tmfqvOveRtHre82mRE=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/b53b4c65-9356-5827-b1ea-8c7a1a84506f/e51150d5ab85cee6fc36726850f0e627ad2e4aba"
+    ],
+    "uuid": "b53b4c65-9356-5827-b1ea-8c7a1a84506f",
+    "version": "1.6.58+0"
+  },
+  "libsixel_jll": {
+    "artifacts": {
+      "libsixel": {
+        "download": [
+          {
+            "sha256": "37ac0b4732eb57c65d94d1707a38801cdfc157f9c68cbbdef45596f95e26edc5",
+            "url": "https://github.com/JuliaBinaryWrappers/libsixel_jll.jl/releases/download/libsixel-v1.10.5+0/libsixel.v1.10.5.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "4f05d8333ba1c1698bca7df1b14c02617374fc12",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "JLLWrappers",
+      "JpegTurbo_jll",
+      "Libdl",
+      "libpng_jll"
+    ],
+    "integrity": "sha256-AoObdXomr3QQWYBsVWyH1Te0ajQRjZakix1X7jwQqF0=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/075b6546-f08a-558a-be8f-8157d0f608a5/c1733e347283df07689d71d61e14be986e49e47a"
+    ],
+    "uuid": "075b6546-f08a-558a-be8f-8157d0f608a5",
+    "version": "1.10.5+0"
+  },
+  "libwebp_jll": {
+    "artifacts": {
+      "libwebp": {
+        "download": [
+          {
+            "sha256": "5ffd74f1258e39736580243161f34dd27cf468788e01aa64e91bd97f981b8352",
+            "url": "https://github.com/JuliaBinaryWrappers/libwebp_jll.jl/releases/download/libwebp-v1.6.0+0/libwebp.v1.6.0.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "c9dacc0e9fdb90a9d30bc35633cd2f84f20a883e",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "Giflib_jll",
+      "JLLWrappers",
+      "JpegTurbo_jll",
+      "Libdl",
+      "Libglvnd_jll",
+      "Libtiff_jll",
+      "libpng_jll"
+    ],
+    "integrity": "sha256-p5RTo2v789cEdehJ2zJSsk+Z/J+rSMCTfvGG+T4Wmic=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/c5f90fcd-3b7e-5836-afba-fc50a0988cb2/4e4282c4d846e11dce56d74fa8040130b7a95cb3"
+    ],
+    "uuid": "c5f90fcd-3b7e-5836-afba-fc50a0988cb2",
+    "version": "1.6.0+0"
+  },
+  "libzip_jll": {
+    "artifacts": {
+      "libzip": {
+        "download": [
+          {
+            "sha256": "fe47525d2021edf29125077bc319a5a6b6f79611348db1b794c13fd26ee46f92",
+            "url": "https://github.com/JuliaBinaryWrappers/libzip_jll.jl/releases/download/libzip-v1.11.3+0/libzip.v1.11.3.aarch64-apple-darwin.tar.gz"
+          }
+        ],
+        "git_tree_sha1": "06298cd44dbb6fbc74ff4970bfa1584ec37f12d0",
+        "platform_key": "aarch64-apple-darwin"
+      }
+    },
+    "deps": [
+      "Artifacts",
+      "Bzip2_jll",
+      "JLLWrappers",
+      "Libdl",
+      "OpenSSL_jll",
+      "XZ_jll",
+      "Zlib_jll",
+      "Zstd_jll"
+    ],
+    "integrity": "sha256-nyOy1VIGKqp2YSReR7+dHPzxqwU0V5fvqTfYYLWW2tA=",
+    "type": "http",
+    "urls": [
+      "https://pkg.julialang.org/package/337d8026-41b4-5cde-a456-74a10e5b31d1/86addc139bca85fdf9e7741e10977c45785727b7"
+    ],
+    "uuid": "337d8026-41b4-5cde-a456-74a10e5b31d1",
+    "version": "1.11.3+0"
+  }
+}

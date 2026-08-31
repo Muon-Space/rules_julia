@@ -267,16 +267,12 @@ function generate_bazel_lockfile(
                 "uuid" => uuid,
             )
 
-            # For JLL packages, extract artifact information
-            if endswith(name, "_jll")
-                pkg_source = find_package_source(name, uuid, tree_hash)
-                if pkg_source !== nothing
-                    artifacts = extract_jll_artifacts(pkg_source, name, uuid)
-                    if artifacts !== nothing
-                        pkg_entry["artifacts"] = artifacts
-                    end
-                else
-                    @warn "Could not find source for JLL package $name"
+            # For packages that ship artifacts, extract artifact information
+            pkg_source = find_package_source(name, uuid, tree_hash)
+            if pkg_source !== nothing
+                artifacts = extract_jll_artifacts(pkg_source, name, uuid)
+                if artifacts !== nothing
+                    pkg_entry["artifacts"] = artifacts
                 end
             end
 
