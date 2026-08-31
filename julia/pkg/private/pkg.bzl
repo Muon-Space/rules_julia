@@ -172,7 +172,6 @@ def install(*, module_ctx, attrs, annotations = {}):
         artifact_repos = {}
         if is_jll_with_artifacts:
             artifact_repos = create_artifact_repos(
-                module_ctx,
                 attrs.name,
                 package_name,
                 uuid,
@@ -213,10 +212,10 @@ def install(*, module_ctx, attrs, annotations = {}):
                 fail("Package {} has type 'git' but missing 'tag' field".format(package_name))
 
             git_repository_args = {
+                "build_file_content": build_file_content,
                 "name": repo_name,
                 "remote": remote,
                 "tag": tag,
-                "build_file_content": build_file_content,
             }
 
             # Apply patch-related attributes if annotations exist for this package
@@ -236,12 +235,12 @@ def install(*, module_ctx, attrs, annotations = {}):
                 fail("Package {} has type 'http' but missing 'urls' field".format(package_name))
 
             http_archive_args = {
-                "name": repo_name,
-                "urls": urls,
+                "build_file_content": build_file_content,
                 "integrity": package_data.get("integrity", ""),
+                "name": repo_name,
                 "sha256": package_data.get("sha256", ""),
                 "type": "tar.gz",
-                "build_file_content": build_file_content,
+                "urls": urls,
             }
 
             # Apply patch-related attributes if annotations exist for this package

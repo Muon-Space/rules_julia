@@ -1,3 +1,7 @@
+"""
+A set of utilities intended to be used in pkg.bzl.
+"""
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("//build_templates:artifact.bzl", "ARTIFACT_BUILD_FILE")
 load(
@@ -9,6 +13,16 @@ load(
 )
 
 def add_annotation_args(package_args, package_annotations):
+    """Add annotation data to the package arguments.
+
+    Args:
+        package_args (dict): The set of arguments that get passed to either git_repository
+            or http_archive.
+        package_annotations (dict): Dictionary mapping package names to annotation data.
+
+    Returns:
+        dict: The modified package_args.
+    """
     if "patches" in package_annotations:
         package_args["patches"] = package_annotations["patches"]
     if "patch_args" in package_annotations:
@@ -24,22 +38,21 @@ def _sanitize_platform_key(platform_key):
 # Mapping from Julia platform keys to Bazel config_setting constraint values
 # We'll leave macos in here to at least have a chance of being able to build those
 _PLATFORM_TO_CONSTRAINTS = {
-    "x86_64-linux-gnu": ["@platforms//os:linux", "@platforms//cpu:x86_64"],
-    "x86_64-linux-musl": ["@platforms//os:linux", "@platforms//cpu:x86_64"],
+    "aarch64-apple-darwin": ["@platforms//os:macos", "@platforms//cpu:aarch64"],
     "aarch64-linux-gnu": ["@platforms//os:linux", "@platforms//cpu:aarch64"],
     "aarch64-linux-musl": ["@platforms//os:linux", "@platforms//cpu:aarch64"],
     "x86_64-apple-darwin": ["@platforms//os:macos", "@platforms//cpu:x86_64"],
-    "aarch64-apple-darwin": ["@platforms//os:macos", "@platforms//cpu:aarch64"],
+    "x86_64-linux-gnu": ["@platforms//os:linux", "@platforms//cpu:x86_64"],
+    "x86_64-linux-musl": ["@platforms//os:linux", "@platforms//cpu:x86_64"],
 }
 
-def create_artifact_repos(module_ctx, hub_name, package_name, package_uuid, artifacts):
+def create_artifact_repos(hub_name, package_name, package_uuid, artifacts):
     """Create http_archive repos for each artifact.
 
     The artifacts dict now contains only the host platform's artifacts (pre-filtered
     by select_downloadable_artifacts() in the Julia manifest compiler).
 
     Args:
-        module_ctx: The module context.
         hub_name: Name of the package hub.
         package_name: Name of the JLL package (e.g., "boost_jll").
         package_uuid: UUID of the JLL package.
@@ -88,10 +101,10 @@ def create_artifact_repos(module_ctx, hub_name, package_name, package_uuid, arti
 
         # Build metadata JSON for runtime
         metadata = {
-            "pkg_name": package_name,
-            "pkg_uuid": package_uuid,
             "artifact_name": artifact_name,
             "git_tree_sha1": git_tree_sha1,
+            "pkg_name": package_name,
+            "pkg_uuid": package_uuid,
             "platform_key": platform_key,
         }
         metadata_json = json.encode(metadata)
