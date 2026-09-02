@@ -184,6 +184,27 @@ function write_json_object(io::IO, obj::AbstractDict, indent::AbstractString = "
     write(io, indent, "}")
 end
 
+function resolve_git_tag(remote, version)
+    """
+    Find the correct tag for the version we seek from `remote`, whether it has a prepended
+    "v" or not.
+    """
+    v_tag = "v" * version
+    bare_tag = version
+    # Check which tag exists on the remote
+    try
+        output = read(`git ls-remote --tags $(remote) $(v_tag) $(bare_tag)`, String)
+        if contains(output, "refs/tags/$(v_tag)")
+            return v_tag
+        elseif contains(output, "refs/tags/$(bare_tag)")
+            return bare_tag
+        end
+    catch
+        # Fall through to default
+    end
+    return v_tag
+end
+
 """Generate Manifest.bazel.json with package metadata for Bazel.
 
 For public packages (General registry): uses http_archive with integrity hash from pkg.julialang.org
@@ -229,7 +250,7 @@ function generate_bazel_lockfile(
             # This allows Bazel to use the host's git auth (SSH keys, credential helpers, etc.)
             repo_url = private_registry_lookup[uuid]
             remote = normalize_git_url(repo_url)
-            tag = "v" * version  # Julia convention: version tags are prefixed with 'v'
+            tag = resolve_git_tag(remote, version)
 
             println("[$current/$total] Private package: $name@$version (git)")
             flush(stdout)
