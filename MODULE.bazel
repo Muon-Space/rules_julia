@@ -45,5 +45,16 @@ use_repo(
     "rules_julia_fmt",
 )
 
+pkg = use_extension("@rules_julia//julia/pkg:defs.bzl", "pkg")
+
+pkg.install(
+    name = "precompile_deps",
+    lockfile = "//julia/private/tests/precompile:Manifest.bazel.json",
+)
+use_repo(
+    pkg,
+    "precompile_deps",
+)
+
 bazel_dep(name = "stardoc", version = "0.8.0", dev_dependency = True, repo_name = "io_bazel_stardoc")
 bazel_dep(name = "rules_rust_mdbook", version = "0.69.0", dev_dependency = True)
