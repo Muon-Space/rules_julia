@@ -1,0 +1,33 @@
+"""Tests for julia_package rule."""
+
+load("//julia/pkg/private:julia_package.bzl", "julia_package")
+
+# Standalone julia_package - tests basic provider construction
+julia_package(
+    name = "test_dep_pkg",
+    pkg_name = "TestDepPkg",
+    uuid = "11111111-1111-1111-1111-111111111111",
+    slug = "abcde",
+    git_tree_sha1 = "0000000000000000000000000000000000000001",
+    srcs = ["src/test_dep.jl"],
+)
+
+# julia_package with deps - tests provider propagation
+julia_package(
+    name = "test_pkg",
+    pkg_name = "TestPkg",
+    uuid = "22222222-2222-2222-2222-222222222222",
+    slug = "fghij",
+    git_tree_sha1 = "0000000000000000000000000000000000000002",
+    srcs = ["src/test_main.jl"],
+    deps = [":test_dep_pkg"],
+)
+
+# julia_package without git_tree_sha1 - tests optional field
+julia_package(
+    name = "test_pkg_no_hash",
+    pkg_name = "TestPkgNoHash",
+    uuid = "33333333-3333-3333-3333-333333333333",
+    slug = "klmno",
+    srcs = ["src/test_no_hash.jl"],
+)
