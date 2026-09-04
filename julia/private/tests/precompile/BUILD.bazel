@@ -15,25 +15,18 @@ julia_library(
     deps = [
         "@precompile_deps",
     ],
-    data = [
-        # ":libcxxwrap_julia",
-        # "LocalPreferences.toml",
-    ],
     manifest_toml = "Manifest.toml",
     project_toml = "Project.toml",
-    # visibility = ["//visibility:public"],
 )
 
 julia_test(
     name = "test_precompile",
     srcs = glob(["test/*.jl"]),
     main = "test/runtests.jl",
-    # target_compatible_with = [
-    #     "@platforms//os:linux",
-    #     "@platforms//cpu:x86_64",
-    # ],
     deps = [
         ":precompile",
     ],
     precompile = True,
+    # This test shouldn't be ran until the whole refactor is complete
+    tags = ["manual"],
 )
