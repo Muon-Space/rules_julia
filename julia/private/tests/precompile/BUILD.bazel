@@ -19,6 +19,7 @@ julia_library(
     project_toml = "Project.toml",
 )
 
+# Once the refactor is complete, we'll be able to turn this test on and it should just work
 julia_test(
     name = "test_precompile",
     srcs = glob(["test/*.jl"]),
@@ -26,7 +27,6 @@ julia_test(
     deps = [
         ":precompile",
     ],
-    precompile = True,
-    # This test shouldn't be ran until the whole refactor is complete
+    # precompile = True,
     tags = ["manual"],
 )
