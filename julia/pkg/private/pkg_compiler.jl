@@ -234,6 +234,9 @@ function generate_bazel_lockfile(
             println("[$current/$total] Private package: $name@$version (git)")
             flush(stdout)
 
+            # Compute slug for depot-shaped layout
+            slug = Base.version_slug(Base.UUID(uuid), Base.SHA1(hex2bytes(tree_hash)))
+
             lock(lockfile_lock) do
                 lockfile[name] = Dict{String,Any}(
                     "type" => "git",
@@ -242,6 +245,8 @@ function generate_bazel_lockfile(
                     "deps" => sort(deps),
                     "version" => version,
                     "uuid" => uuid,
+                    "git_tree_sha1" => tree_hash,
+                    "slug" => slug,
                 )
             end
         else
@@ -258,6 +263,9 @@ function generate_bazel_lockfile(
                 rethrow(e)
             end
 
+            # Compute slug for depot-shaped layout
+            slug = Base.version_slug(Base.UUID(uuid), Base.SHA1(hex2bytes(tree_hash)))
+
             pkg_entry = Dict{String,Any}(
                 "type" => "http",
                 "urls" => [url],
@@ -265,6 +273,8 @@ function generate_bazel_lockfile(
                 "deps" => sort(deps),
                 "version" => version,
                 "uuid" => uuid,
+                "git_tree_sha1" => tree_hash,
+                "slug" => slug,
             )
 
             # For JLL packages, extract artifact information

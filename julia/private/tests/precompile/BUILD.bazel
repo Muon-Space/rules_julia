@@ -1,0 +1,32 @@
+load("@rules_julia//julia:defs.bzl", "julia_test", "julia_binary", "julia_standalone_binary")
+load("@rules_julia//julia/pkg:defs.bzl", "julia_pkg_compiler")
+load("@rules_julia//julia:defs.bzl", "julia_library", "julia_test")
+
+julia_pkg_compiler(
+    name = "pkg_update",
+    project_toml = "Project.toml",
+    manifest_toml = "Manifest.toml",
+    manifest_bazel_json = "Manifest.bazel.json",
+)
+
+julia_library(
+    name = "precompile",
+    srcs = glob(["src/**/*.jl"]),
+    deps = [
+        "@precompile_deps",
+    ],
+    manifest_toml = "Manifest.toml",
+    project_toml = "Project.toml",
+)
+
+# Once the refactor is complete, we'll be able to turn this test on and it should just work
+julia_test(
+    name = "test_precompile",
+    srcs = glob(["test/*.jl"]),
+    main = "test/runtests.jl",
+    deps = [
+        ":precompile",
+    ],
+    # precompile = True,
+    tags = ["manual"],
+)
